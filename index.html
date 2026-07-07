@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Cowork Training — EA & TA Workshop</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #f5f5f7;
+        color: #1d1d1f;
+        line-height: 1.6;
+        transition: background-color 0.2s, color 0.2s;
+    }
+    body.dark-mode { background: #17181a; color: #e6e6e6; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+    header {
+        display: flex; justify-content: space-between; align-items: center; gap: 12px;
+        margin-bottom: 24px; padding: 20px 24px; background: white; border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06); flex-wrap: wrap;
+    }
+    body.dark-mode header { background: #232426; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+    .header-title h1 { font-size: 22px; margin: 0; }
+    .header-title p { font-size: 13px; color: #6e6e73; margin-top: 2px; }
+    body.dark-mode .header-title p { color: #a1a1a6; }
+    .header-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+    .toggle-btn { background: white; color: #1d1d1f; border: 1px solid #d2d2d7; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 500; }
+    body.dark-mode .toggle-btn { background: #2c2d2f; color: #e6e6e6; border-color: #444; }
+    .toggle-btn.on { background: #cc785c; color: white; border-color: #cc785c; }
+
+    nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+    .tab-btn { padding: 9px 16px; border: 1px solid #d2d2d7; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; background: white; color: #1d1d1f; transition: all .15s; white-space: nowrap; flex-shrink: 0; }
+    @media (max-width: 1000px) { .tab-btn { padding: 8px 11px; font-size: 12px; } }
+    body.dark-mode .tab-btn { background: #232426; color: #e6e6e6; border-color: #3a3b3d; }
+    .tab-btn.active { background: #cc785c; color: white; border-color: #cc785c; }
+    body.dark-mode .tab-btn.active { background: #cc785c; color: white; border-color: #cc785c; }
+    .tab-btn:hover:not(.active) { background: #f0f0f2; }
+    body.dark-mode .tab-btn:hover:not(.active) { background: #2c2d2f; }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .card { background: white; border-radius: 12px; padding: 22px 24px; margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    body.dark-mode .card { background: #232426; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+
+    h2 { font-size: 19px; margin-bottom: 12px; color: #cc785c; }
+    h3 { font-size: 15px; margin-top: 16px; margin-bottom: 8px; }
+    p { margin-bottom: 8px; }
+    ul, ol { margin-left: 20px; margin-top: 8px; margin-bottom: 8px; }
+    li { margin-bottom: 4px; }
+    .muted { color: #6e6e73; font-size: 13px; }
+    body.dark-mode .muted { color: #a1a1a6; }
+    a { color: #cc785c; }
+
+
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 11px; font-weight: 600; background: #eee; color: #555; margin-left: 6px; vertical-align: middle; }
+    body.dark-mode .badge { background: #3a3b3d; color: #ccc; }
+    .badge.claude { background: #f4e3da; color: #a2543a; }
+    .badge.gemini { background: #dce8fc; color: #2255aa; }
+    .badge.solved { background: #dcf2e3; color: #1e7d43; }
+    .badge.explore { background: #ede4f7; color: #6b3fa0; }
+    body.dark-mode .badge.claude { background: #4a3226; color: #f0b499; }
+    body.dark-mode .badge.gemini { background: #1f3352; color: #9dc1f5; }
+    body.dark-mode .badge.solved { background: #16351f; color: #7fd9a0; }
+    body.dark-mode .badge.explore { background: #2e2140; color: #cba8ec; }
+    .usecase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .usecase-table th, .usecase-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #f0f0f2; vertical-align: top; }
+    body.dark-mode .usecase-table th, body.dark-mode .usecase-table td { border-bottom-color: #3a3b3d; }
+    .usecase-table th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; color: #6e6e73; }
+    .usecase-table td.who { color: #6e6e73; white-space: nowrap; }
+    body.dark-mode .usecase-table th, body.dark-mode .usecase-table td.who { color: #a1a1a6; }
+
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e5e5e7; }
+    body.dark-mode th, body.dark-mode td { border-bottom-color: #3a3b3d; }
+    th { background: #f5f5f7; font-weight: 600; }
+    body.dark-mode th { background: #2c2d2f; }
+
+    textarea { width: 100%; padding: 10px; border: 1px solid #d2d2d7; border-radius: 8px; font-family: monospace; font-size: 13px; resize: vertical; min-height: 80px; margin: 8px 0; background: white; color: inherit; }
+    body.dark-mode textarea { background: #1a1b1d; border-color: #444; }
+    input[type="number"], input[type="text"], select { padding: 9px 10px; border: 1px solid #d2d2d7; border-radius: 8px; font-size: 14px; background: white; color: inherit; width: 100%; }
+    body.dark-mode input, body.dark-mode select { background: #1a1b1d; border-color: #444; color: #e6e6e6; }
+
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+    .input-group { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 500; }
+
+    .model-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 12px 0; }
+    .model-option { padding: 10px; border: 2px solid #d2d2d7; border-radius: 8px; cursor: pointer; text-align: center; transition: all .15s; font-size: 13px; }
+    body.dark-mode .model-option { border-color: #444; }
+    .model-option:hover { border-color: #cc785c; }
+    .model-option.selected { border-color: #cc785c; background: #cc785c; color: white; }
+
+    .result { background: #eef7ee; padding: 16px; border-radius: 8px; margin-top: 12px; border-left: 4px solid #4caf50; }
+    body.dark-mode .result { background: #1b2e1b; border-left-color: #66bb6a; }
+    .result-value { font-size: 26px; font-weight: 700; color: #2e7d32; }
+    body.dark-mode .result-value { color: #81c784; }
+    .result-sub { font-size: 13px; margin-top: 6px; color: #444; }
+    body.dark-mode .result-sub { color: #bbb; }
+
+    .breakdown { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 14px 0; }
+    .breakdown-item { background: #f5f5f7; padding: 10px; border-radius: 8px; text-align: center; }
+    body.dark-mode .breakdown-item { background: #2c2d2f; }
+    .breakdown-label { font-size: 11px; color: #6e6e73; margin-bottom: 4px; }
+    body.dark-mode .breakdown-label { color: #a1a1a6; }
+    .breakdown-value { font-size: 17px; font-weight: 700; color: #cc785c; }
+
+    .scenario { background: #fff3e8; padding: 14px 16px; border-radius: 8px; margin: 12px 0; border-left: 4px solid #cc785c; cursor: pointer; }
+    body.dark-mode .scenario { background: #2e2318; }
+    .scenario-question { font-weight: 600; }
+    .scenario-answer { display: none; margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.6); border-radius: 6px; font-size: 13px; }
+    body.dark-mode .scenario-answer { background: rgba(0,0,0,0.25); }
+    .scenario-answer.show { display: block; }
+
+    .snippet { background: #f5f5f7; padding: 12px 14px; border-radius: 8px; border-left: 4px solid #2196F3; cursor: pointer; margin-bottom: 10px; transition: background .15s; }
+    body.dark-mode .snippet { background: #202b3a; border-left-color: #64b5f6; }
+    .snippet:hover { background: #e3f0fb; }
+    body.dark-mode .snippet:hover { background: #24344a; }
+    .snippet code { display: block; font-family: -apple-system, sans-serif; font-size: 13px; margin-top: 6px; }
+    .copy-btn { font-size: 11px; padding: 4px 10px; margin-top: 8px; border-radius: 12px; }
+
+    .decision-tree { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+    .dt-question { font-weight: 600; margin-bottom: 6px; }
+    .dt-options { display: flex; gap: 10px; flex-wrap: wrap; }
+    .dt-btn { padding: 10px 16px; border: 1px solid #d2d2d7; border-radius: 8px; background: white; cursor: pointer; font-size: 13px; }
+    body.dark-mode .dt-btn { background: #2c2d2f; border-color: #444; color: #e6e6e6; }
+    .dt-btn:hover { border-color: #cc785c; }
+    .dt-result { margin-top: 14px; padding: 16px; border-radius: 8px; display: none; width: 100%; }
+    .dt-result.show { display: block; }
+    .dt-result.claude { background: #f4e3da; border-left: 4px solid #cc785c; }
+    .dt-result.gemini { background: #dce8fc; border-left: 4px solid #2255aa; }
+    body.dark-mode .dt-result.claude { background: #3a2a1f; }
+    body.dark-mode .dt-result.gemini { background: #1c2c47; }
+    .dt-result h3 { margin-top: 0; }
+    .dt-restart { margin-top: 10px; font-size: 12px; }
+
+    .use-case { border: 1px solid #e5e5e7; border-radius: 10px; padding: 16px 18px; margin-bottom: 14px; }
+    body.dark-mode .use-case { border-color: #3a3b3d; }
+    .use-case-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .use-case-title { font-weight: 700; font-size: 15px; }
+    .prompt-box { background: #f5f5f7; border-radius: 8px; padding: 12px 14px; margin: 10px 0; font-family: monospace; font-size: 12.5px; white-space: pre-wrap; }
+    body.dark-mode .prompt-box { background: #1a1b1d; }
+
+    .step-list { counter-reset: step; list-style: none; margin-left: 0; }
+    .step-list li { counter-increment: step; position: relative; padding: 6px 0 6px 32px; }
+    .step-list li::before { content: counter(step); position: absolute; left: 0; top: 6px; width: 22px; height: 22px; background: #f4e3da; color: #a2543a; border-radius: 50%; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    body.dark-mode .step-list li::before { background: #4a3226; color: #f0b499; }
+
+
+    .warn-box { background: #fff3cd; border-left: 4px solid #e6a817; padding: 12px 16px; border-radius: 6px; margin: 14px 0; font-size: 13.5px; }
+    body.dark-mode .warn-box { background: #3a2f14; }
+    .warn-box strong { display: block; margin-bottom: 4px; }
+
+    .hunt-list { list-style: none; }
+    .hunt-list li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f2; }
+    body.dark-mode .hunt-list li { border-bottom-color: #2c2d2f; }
+    .hunt-list input[type="checkbox"] { margin-top: 3px; width: 16px; height: 16px; flex-shrink: 0; }
+    .hunt-progress { font-size: 13px; font-weight: 600; color: #cc785c; margin-top: 10px; }
+
+    .agenda-row { display: flex; gap: 14px; padding: 8px 0; border-bottom: 1px solid #e5e5e7; align-items: baseline; }
+    body.dark-mode .agenda-row { border-bottom-color: #3a3b3d; }
+    .agenda-num { min-width: 26px; font-weight: 700; font-size: 13px; color: #cc785c; }
+    .agenda-desc { font-size: 14px; }
+    .agenda-desc .muted { display: block; margin-top: 2px; }
+
+    footer { text-align: center; padding: 20px; font-size: 12px; color: #999; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <div class="header-title">
+            <h1>🚀 Claude Cowork Training</h1>
+            <p>EA &amp; TA workshop · Jul 8, 2026</p>
+        </div>
+        <div class="header-controls">
+            <button class="toggle-btn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+        </div>
+    </header>
+
+    <nav>
+        <button class="tab-btn active" onclick="showTab('start', this)">🏠 Start Here</button>
+        <button class="tab-btn" onclick="showTab('connectors', this)">🔌 Connectors</button>
+        <button class="tab-btn" onclick="showTab('gemini', this)">✨ Gemini Enterprise</button>
+        <button class="tab-btn" onclick="showTab('claude', this)">🧠 Claude Chat & Cowork</button>
+        <button class="tab-btn" onclick="showTab('buildtogether', this)">🔧 Build Together</button>
+        <button class="tab-btn" onclick="showTab('compare', this)">⚖️ Compare & Cost</button>
+        <button class="tab-btn" onclick="showTab('usecases', this)">💼 Use Cases & Hands-On</button>
+        <button class="tab-btn" onclick="showTab('faq', this)">❓ FAQ</button>
+    </nav>
+
+    <!-- ============ 1. START HERE ============ -->
+    <section id="start" class="section active">
+        <div class="card">
+            <h2>What Is This, Really?</h2>
+            <p>Think of Claude or Gemini like a colleague who's read almost everything and types very fast. You ask a question or give an instruction, and it answers right away — using what it already learned, not by searching the internet live like Google does. It doesn't remember you from a different conversation unless you tell it again.</p>
+            <p><strong>Claude</strong> is made by a company called Anthropic. <strong>Gemini</strong> is made by Google. It's a bit like Word versus Google Docs — different companies, same basic idea (helping you write and organize things), different features.</p>
+            <div class="warn-box">
+                <strong>⚠️ It can sound sure of itself and still be wrong.</strong>
+                Both tools can get a name wrong, misread a document, or make up a detail that sounds real but isn't — confidently, without flagging any doubt. That's exactly why every task today ends with "check it before you send or act on it." Not a formality — a real possibility every single time.
+            </div>
+            <div class="warn-box">
+                <strong>⚠️ Don't paste passwords or sensitive personal data into the chat.</strong>
+                Don't type in passwords, credit card numbers, or someone's private ID/SSN-type information directly as part of a request. This is separate from folder access (covered in Connectors) — this is about what you type, not just what files you grant access to.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Welcome</h2>
+            <p>This is a hands-on introduction to two AI assistants your team now has access to: <strong>Claude</strong> (Chat + Cowork) and <strong>Gemini Enterprise</strong>. By the end of today you'll know which tool to use, how to connect it, and you'll have tried a real task yourself.</p>
+            <p>Each EA &amp; TA has a <strong>$1,000 Claude Cowork credit</strong> for this trial period — think of it like a $1,000 gift card that only works for Claude Cowork. No personal card, no invoice to submit.</p>
+        </div>
+
+        <div class="card">
+            <h2>Prerequisite (already done for this session)</h2>
+            <p>Everyone here already has Claude Cowork installed and signed in — nothing to set up today. This is just a note for anyone new joining later, or if you're re-reading this on your own:</p>
+            <ul>
+                <li><strong>Claude</strong> — runs through an app called Claude Desktop, installed via self-service. Sign in with your normal work email and password (the same login you use for everything else).</li>
+                <li><strong>Gemini Enterprise</strong> — runs in your web browser, no install needed. Sign in with your work account.</li>
+            </ul>
+            <p class="muted">If either one ever asks for a personal Google/email account instead of your work one — stop and flag it before continuing.</p>
+            <p class="muted">If sign-in ever looks broken: log all the way out and back in again, not just close and reopen the app. That fixes most sign-in issues.</p>
+        </div>
+        <div class="card">
+            <h2>Today's Flow</h2>
+            <div class="agenda-row"><div class="agenda-num">1</div><div class="agenda-desc">Connectors<span class="muted">How these tools reach your inbox, calendar, and other apps (including Slack, for Claude) — the one concept everything else depends on</span></div></div>
+            <div class="agenda-row"><div class="agenda-num">2</div><div class="agenda-desc">Gemini Enterprise<span class="muted">What it does best, when to reach for it first</span></div></div>
+            <div class="agenda-row"><div class="agenda-num">3</div><div class="agenda-desc">Claude — Chat &amp; Cowork<span class="muted">When to use it instead, connecting Slack and other tools</span></div></div>
+            <div class="agenda-row"><div class="agenda-num">4</div><div class="agenda-desc">Build Together<span class="muted">Connect every connector as a group, live</span></div></div>
+            <div class="agenda-row"><div class="agenda-num">5</div><div class="agenda-desc">Compare &amp; Cost<span class="muted">Live demo, decision guide, budget calculator</span></div></div>
+            <div class="agenda-row"><div class="agenda-num">6</div><div class="agenda-desc">Use Cases &amp; Hands-On<span class="muted">Try a real task yourself</span></div></div>
+        </div>
+    </section>
+
+    <!-- ============ 2. CONNECTORS ============ -->
+    <section id="connectors" class="section">
+        <div class="card">
+            <h2>🔌 What's a Connector?</h2>
+            <p>A connector lets Claude or Gemini see one of your other apps — your inbox, your calendar, a shared drive (and for Claude, Slack too). Without one, it only knows what you type into the chat box, nothing else.</p>
+            <p>Think of it like giving a new colleague read-access to your calendar: they can look, but for anything that actually changes something (like sending an email), they always check with you first before doing it.</p>
+            <p><strong>Both tools today are built around connectors</strong> — the difference between Gemini Enterprise and Claude mostly comes down to <em>which</em> connectors each one offers, which is exactly what the next two tabs cover.</p>
+        </div>
+        <div class="card">
+            <h2>Status: Connectors Already Set Up</h2>
+            <p>Connectors need to be switched on at the organization level before anyone can connect their own account — that's already done for this session: <strong>Gemini Enterprise</strong> has Google Workspace (Gmail, Calendar, Drive, Docs, Chat, Keep, Tasks), GitHub, and Asana enabled. If any Claude connector (Slack, Gmail, Drive, Calendar) doesn't authorize during Build Together, flag it — that one specific connector may not be switched on yet.</p>
+        </div>
+        <div class="card">
+            <h2>One Rule That Matters More Than Any Feature</h2>
+            <p>A connector only shows what <strong>you</strong> could already see yourself. If you can't open a file, a channel, or an email today, connecting Claude or Gemini to it doesn't unlock it — same as a colleague forwarding you a folder you don't have permission for. Nothing changes.</p>
+            <p class="muted">This is the answer if anyone asks "could it see private things it shouldn't?" — no, never more than you can already see.</p>
+        </div>
+        <div class="card">
+            <h2>Skills — the Other Half of "What It Can Do"</h2>
+            <p>Alongside connectors (what it can <em>see</em>), both tools have reusable presets — think of these like camera presets. You don't need to know the technical settings; you just pick "portrait" and it handles the rest. Claude calls these <strong>skills</strong>, Gemini calls the same idea a <strong>Gem</strong> — some come ready-made, and you can also build your own once and reuse it forever instead of re-explaining yourself every time. More on each in the tabs below.</p>
+        </div>
+        <div class="card">
+            <h2>The "Important Folder" — Limiting What It Can Touch</h2>
+            <p>When you use Claude Cowork on your own files, you choose a folder and grant access to <em>that folder specifically</em> — not your whole computer. This is deliberate, and it's good practice, not just a limitation:</p>
+            <ul>
+                <li>Create one dedicated folder per task or project.</li>
+                <li>Grant Cowork access to only that folder.</li>
+                <li>Avoid granting broad access "just in case" — especially for anything sensitive (financial documents, contracts, personal records).</li>
+            </ul>
+            <p class="muted">This is the same idea as giving a new contractor a key to one room, not the whole building — it's not about distrust, it's just good practice to limit access.</p>
+        </div>
+    </section>
+
+    <!-- ============ 3. GEMINI ENTERPRISE ============ -->
+    <section id="gemini" class="section">
+        <div class="card">
+            <h2>✨ Gemini Enterprise (Web)</h2>
+            <p>Gemini Enterprise works right in your browser, like Gmail or Google Docs — nothing to install. It comes ready-connected to a lot of things out of the box, so it's often the fastest way to pull together information that lives in more than one place.</p>
+            <h3>What's actually connected right now</h3>
+            <div class="grid3">
+                <div class="breakdown-item"><div class="breakdown-label">Google Workspace (one bundle)</div><div class="breakdown-value" style="font-size:13px;">Gmail, Calendar, Drive, Docs, Chat, Keep, Tasks</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Other tools</div><div class="breakdown-value" style="font-size:13px;">GitHub, Asana</div></div>
+            </div>
+            <p class="muted">This is turned on under Connected Apps in Gemini — Google Workspace is one single switch that turns on all of Gmail, Calendar, Drive, Docs, Chat, Keep, and Tasks together, not one at a time. HubSpot, Mailchimp, and Salesforce exist as options too, but are currently switched off.</p>
+            <div class="warn-box">
+                <strong>"Google Chat" is not Slack.</strong>
+                Google Chat is Google's own messaging tool, a completely different product from Slack. Gemini Enterprise still has no way to read Slack — that's Claude-only, covered in the next tab.
+            </div>
+            <p style="margin-top:14px;">In the web app, you turn connectors on and off under Settings → Connected Apps. Once something's on, you can ask things like <em>"Do I have any meetings today?"</em> or <em>"Summarize my last few emails"</em> and it pulls the answer from that connected app directly.</p>
+        </div>
+        <div class="card">
+            <h2>Does Gemini Have "Skills" Too?</h2>
+            <p>Yes — but in Gemini Enterprise it's called a <strong>Gem</strong>, not a "Skill." Same idea: a saved prompt template you build once (name, instructions, sometimes a starter question) and reuse forever, instead of re-explaining yourself every time. Find it in the left sidebar, below Library — click <strong>Gems</strong> → <strong>+ New Gem</strong>.</p>
+            <div class="warn-box">
+                <strong>Someone on our team already built one.</strong>
+                There's a real Gem in our workspace called "Birthday Card Creation - EA/TA" — personalized birthday and anniversary content: cards, text for Slack posts (you still paste it in yourself — Gemini has no Slack connector to post directly), and All Hands slide captions. That's a Gem doing exactly the same job as a Claude skill, just under a different name.
+            </div>
+            <p class="muted">If a screen ever looks different from this (Google updates its UI often), say "let's check together" rather than guessing — the concept (a reusable saved prompt) is what matters, not the exact click path.</p>
+        </div>
+        <div class="card">
+            <h2>When to Reach for Gemini Enterprise First</h2>
+            <ul>
+                <li>Quick lookups across a system you've already connected ("what's on my calendar," "find that email from last week")</li>
+                <li>Well-defined, single-step tasks — a draft, a summary, a quick rewrite</li>
+                <li>Anything routine where speed matters more than deep multi-step reasoning — and it's free either way</li>
+            </ul>
+            <p class="muted">This is why it's the company default for everyday work — it's fast, broad, and free for the kind of tasks most of your day is made of.</p>
+        </div>
+    </section>
+
+    <!-- ============ 4. CLAUDE CHAT & COWORK ============ -->
+    <section id="claude" class="section">
+        <div class="card">
+            <h2>🧠 Claude — Two Ways to Work</h2>
+            <p>Claude comes in two forms you'll actually use. Same colleague, just two different ways of working with them:</p>
+            <div class="grid2">
+                <div class="breakdown-item" style="text-align:left; padding: 16px;">
+                    <div class="breakdown-label">💬 CLAUDE CHAT</div>
+                    <p style="font-size:13px; margin-top:6px;">Like working at a desk. You ask, it answers — a quick draft, a question, thinking something through out loud. It doesn't take independent action.</p>
+                </div>
+                <div class="breakdown-item" style="text-align:left; padding: 16px;">
+                    <div class="breakdown-label">🛠️ CLAUDE COWORK</div>
+                    <p style="font-size:13px; margin-top:6px;">Like a workshop with equipment. You describe an outcome, grant it a folder, and it works through the steps — documents, files, multi-step tasks — and hands back a finished result.</p>
+                </div>
+            </div>
+            <p style="margin-top: 14px;">There's also <strong>Claude Code</strong> — a separate tool for software developers writing code. <strong>You won't need it.</strong> Think of it as a specialized tool for engineers — Chat and Cowork cover everything in an EA/TA role.</p>
+        </div>
+
+        <div class="card">
+            <h2>Connecting Claude to Slack — Two Different Things</h2>
+            <p>This trips people up, so it's worth being precise: there are <strong>two separate Slack integrations</strong>, and you may want both.</p>
+            <table>
+                <thead><tr><th>Feature</th><th>What it does</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Claude in Slack</strong></td><td>Adds Claude as an app inside Slack — you message it directly in a channel or DM, like messaging a colleague.</td></tr>
+                    <tr><td><strong>The Slack connector</strong></td><td>Turned on in Claude's own settings (not inside Slack itself) — lets Claude look up information from your Slack channels, DMs, and shared files while you're chatting with it somewhere else, e.g. in Claude Chat you can ask "summarize what happened in #project-x this week."</td></tr>
+                </tbody>
+            </table>
+            <p class="muted">Same permission rule as before: the connector only sees channels and messages you can already see.</p>
+        </div>
+
+        <div class="card">
+            <h2>Other Connectors Worth Knowing</h2>
+            <ul>
+                <li><strong>Gmail</strong> — Claude can search and read your email and draft replies (drafts require your review before sending)</li>
+                <li><strong>Google Drive</strong> — search and reference documents you have access to</li>
+                <li><strong>Google Calendar</strong> — check, create, and update events</li>
+                <li>New connectors are added regularly — the pattern is always the same: enable it, then Claude can search that system as context</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ============ BUILD TOGETHER ============ -->
+    <section id="buildtogether" class="section">
+        <div class="card">
+            <h2>🔧 Let's Build This Together, Right Now</h2>
+            <p>Not a demo you watch — something you do, at the same time as everyone else in the room. Open your own laptop. We're going to connect every available connector on both tools, one at a time, together. If yours doesn't work, say so out loud — someone next to you probably hit the same snag.</p>
+            <div class="warn-box">
+                <strong>If a connector won't authorize:</strong>
+                It's almost always the org-level toggle, not something you did wrong. Flag the trainer immediately rather than troubleshooting alone — this was supposed to be checked before today (see the Connectors tab).
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>The Connector Scavenger Hunt</h2>
+            <p class="muted">Check each one off as you connect it. First table to finish all of theirs, shout it out.</p>
+            <ol class="step-list">
+                <li>Open Claude Desktop → Settings → Connectors</li>
+                <li>Connect Slack — authorize in the browser tab that opens, come back when done</li>
+                <li>Connect Gmail, Google Drive, and Google Calendar the same way</li>
+                <li>Switch to Gemini Enterprise in your browser → Settings → Connected Apps — the single "Google Workspace" toggle should already be on, covering Gmail and Calendar together (Gemini Enterprise doesn't connect to Slack — that's a Claude-only connector)</li>
+            </ol>
+            <ul class="hunt-list" id="huntList">
+                <li><input type="checkbox" onchange="updateHuntProgress()"> Claude: Slack connected</li>
+                <li><input type="checkbox" onchange="updateHuntProgress()"> Claude: Gmail connected</li>
+                <li><input type="checkbox" onchange="updateHuntProgress()"> Claude: Drive connected</li>
+                <li><input type="checkbox" onchange="updateHuntProgress()"> Claude: Calendar connected</li>
+                <li><input type="checkbox" onchange="updateHuntProgress()"> Gemini Enterprise: Google Workspace connected</li>
+            </ul>
+            <div class="hunt-progress" id="huntProgress">0 / 5 connected</div>
+        </div>
+
+        <div class="card">
+            <h2>Now Run the Same Question in Both</h2>
+            <p>Once connected on both, ask each tool the exact same thing:</p>
+            <div class="prompt-box">Do I have any unread emails that look urgent, and what's on my calendar for the rest of today?</div>
+            <p>Compare: which one answered faster? Which one's answer did you trust more? Did either one ask you to approve an action before doing it?</p>
+            <p class="muted">Then, Claude-only: try "Summarize what's happened in #[a channel you're in] over the last day" — this is a Claude-Slack-connector-only capability, Gemini Enterprise can't do this one.</p>
+        </div>
+    </section>
+
+    <!-- ============ 5. COMPARE & COST ============ -->
+    <section id="compare" class="section">
+        <div class="card">
+            <h2>⚖️ Live Demo: Where the Tools Actually Diverge</h2>
+            <p>Different from the Build Together exercise (where everyone ran the same simple question themselves) — this one runs live on the shared screen, with a harder, judgment-based twist to show where Cowork's extra capability actually earns its keep.</p>
+            <p class="muted">Suggested demo task: pull this week's meetings from your calendar and draft a one-line summary of each. Run it in Gemini Enterprise first (fast, single-step, connector does the work), then in Cowork with a small twist that needs judgment (e.g. "flag any that look double-booked and suggest which to move").</p>
+        </div>
+
+        <div class="card">
+            <h2>Try the Decision Guide</h2>
+            <p class="muted">Answer honestly about a task in front of you right now.</p>
+            <div class="decision-tree" id="dtRoot">
+                <div id="dtStep1">
+                    <div class="dt-question">1. Is this a quick, well-defined task? (a short draft, a lookup, a simple rewrite)</div>
+                    <div class="dt-options">
+                        <button class="dt-btn" onclick="dtAnswer('q1', 'yes')">Yes — quick & simple</button>
+                        <button class="dt-btn" onclick="dtAnswer('q1', 'no')">No — it's more involved</button>
+                    </div>
+                </div>
+                <div id="dtStep2" style="display:none;">
+                    <div class="dt-question">2. Does it involve pulling together multiple files, apps, or steps?</div>
+                    <div class="dt-options">
+                        <button class="dt-btn" onclick="dtAnswer('q2', 'yes')">Yes — multi-step or multi-file</button>
+                        <button class="dt-btn" onclick="dtAnswer('q2', 'no')">No — moderate, one app, one step</button>
+                    </div>
+                </div>
+                <div class="dt-result claude" id="dtResultClaude">
+                    <h3>👉 Use Claude Cowork</h3>
+                    <p>Multi-step, multi-file work is exactly what Cowork is built for. (If it's also high-stakes, that's a reason to double-check the output carefully before sending — not a reason to pick Cowork over Gemini by itself, since both can sound confident and still be wrong.)</p>
+                    <button class="dt-btn dt-restart" onclick="dtRestart()">↺ Try another scenario</button>
+                </div>
+                <div class="dt-result gemini" id="dtResultGeminiSimple">
+                    <h3>👉 Use Gemini Enterprise</h3>
+                    <p>Quick and well-scoped — Gemini gets it done fast, and it's included in your license, so it doesn't touch your Cowork credit. Save Cowork for tasks that need it.</p>
+                    <button class="dt-btn dt-restart" onclick="dtRestart()">↺ Try another scenario</button>
+                </div>
+                <div class="dt-result gemini" id="dtResultGeminiModerate">
+                    <h3>👉 Use Gemini Enterprise</h3>
+                    <p>Single app, single step — Gemini is the default for this middle band since it's free to use as much as you need, even for something important. Reach for Cowork when scope grows to multiple apps or steps.</p>
+                    <button class="dt-btn dt-restart" onclick="dtRestart()">↺ Try another scenario</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>How the Two Tools Are Actually Paid For</h2>
+            <ul>
+                <li><strong>Gemini Enterprise</strong> is like an all-you-can-eat plan we've already paid for — use it as much as you want, nothing runs out.</li>
+                <li><strong>Claude Cowork</strong> is like a $1,000 gift card — it goes down every time you use it.</li>
+            </ul>
+            <p>That's the real reason Gemini Enterprise is the default for routine work — not that Claude is worse, but only Claude usage counts against your limited gift card.</p>
+            <p class="muted">This $1,000 gift card is a one-time pilot amount, good through September — see the Budget Timeline further down for what changes in October.</p>
+            <p class="muted">We're not putting the two side by side in a price table — one has a running cost and one doesn't, so there's nothing real to compare.</p>
+            <div class="warn-box" style="margin-top:14px;">
+                <strong>Quick rule of thumb, if you remember nothing else:</strong> reach for Gemini Enterprise first for routine, single-app work — it's free to run as much as you like. Reach for Claude Cowork when a task spans multiple files or apps and needs several steps done for you. Just reading things (a Slack channel, an inbox, a document) barely touches your $1,000 credit — see the real example below.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>What's a Token? Estimating a Real Document</h2>
+            <p>A token is like a syllable — a small chunk of text, not quite a whole word. The AI reads and writes in these small chunks instead of grabbing a whole sentence at once. Rough rule of thumb:</p>
+            <ul>
+                <li>1 page of a Word doc (~400 words) ≈ 500–600 tokens</li>
+                <li>A 20-page policy document ≈ 10,000–12,000 tokens</li>
+            </ul>
+            <h3>Estimate from a document you're about to hand it</h3>
+            <div class="grid2">
+                <div class="input-group">
+                    <label>Roughly how many pages is the document?</label>
+                    <input type="number" id="docPages" value="5" oninput="calcDocTokens()">
+                </div>
+                <div class="input-group">
+                    <label>Type</label>
+                    <select id="docType" onchange="calcDocTokens()">
+                        <option value="prose">Prose / Word doc (dense text)</option>
+                        <option value="slides">Slide deck (sparse per page)</option>
+                        <option value="spreadsheet">Spreadsheet (tabular, token-heavy)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="breakdown"><div class="breakdown-item"><div class="breakdown-label">Estimated tokens</div><div class="breakdown-value" id="docTokenEstimate">3,000</div></div></div>
+            <p class="muted">This is what "context" means in practice: everything you hand the assistant (this document, prior messages, connected data it pulled in) all counts toward what it's working with in that conversation.</p>
+        </div>
+
+        <div class="card">
+            <h2>Or Paste Text Directly</h2>
+            <textarea id="tokenInput" placeholder="Paste an email or paragraph here..." oninput="countTokens()"></textarea>
+            <div class="breakdown">
+                <div class="breakdown-item"><div class="breakdown-label">Words</div><div class="breakdown-value" id="wordCount">0</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Estimated tokens</div><div class="breakdown-value" id="estTokens">0</div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔍 Real Example: What Does Reading a Slack DM Actually Cost?</h2>
+            <p>This isn't a made-up example. It's the real Slack DM thread between Yash and Stefanie from this morning, about this exact workshop — 14 short back-and-forth messages, nothing unusual.</p>
+            <div class="breakdown">
+                <div class="breakdown-item"><div class="breakdown-label">Messages in the thread</div><div class="breakdown-value">14</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Words you'd actually read</div><div class="breakdown-value">~120</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Tokens for just those words</div><div class="breakdown-value">~160</div></div>
+            </div>
+            <p>But when Claude reads a Slack channel or DM through a connector, it doesn't just see the words in the chat bubbles like you do. For <em>every single message</em>, it also reads who sent it, their email, the exact timestamp, and a unique message ID — bookkeeping that's invisible inside the Slack app itself. Even a one-word reply like "Sure thing" drags that same overhead along with it.</p>
+            <div class="breakdown">
+                <div class="breakdown-item"><div class="breakdown-label">Same 14 messages, with that bookkeeping included</div><div class="breakdown-value">~500–600 tokens</div></div>
+            </div>
+            <p>So just <strong>opening and reading</strong> one short, quiet DM thread costs roughly 500 tokens — before Claude has thought about your question or typed a single word of reply. Since checking Slack channels and DMs is one of the most common things you'll ask Claude to do, this is the real-world version of "input tokens per step" in the calculator below.</p>
+            <div class="warn-box">
+                <strong>We watched this live, and it's a good lesson.</strong> Asking a real question about a Slack thread (not just reading it — searching for it, reading it, thinking, writing an answer) ran into the low thousands of tokens on a live usage counter, not hundreds. That's not a contradiction: reading was still ~500-600 tokens on its own. The rest came from everything else in the same request — the search, the thinking, the reply. A real task is always several steps stacked together, which is exactly why the calculator below has a "steps this task takes" field instead of asking for one number.
+            </div>
+            <p class="muted">Scale it up: a busy 100-message channel is roughly 7× this thread, so figure a few thousand tokens just to read it. Even at 4,000 tokens, that's about <strong>$0.02</strong> of your $1,000 credit — reading is cheap. What adds up is asking Claude to re-read the same large channel over and over in one day.</p>
+        </div>
+
+        <div class="card">
+            <h2>How Far Does Your $1,000 Cowork Credit Go?</h2>
+            <p class="muted">This is for Claude Cowork tasks only — Gemini Enterprise usage doesn't touch this credit at all, so it never needs to be part of this math.</p>
+            <div class="warn-box">
+                <strong>Why there's a "steps" field below:</strong>
+                A single Cowork task isn't one exchange — it's usually many: reading a file, thinking, checking another file, drafting, revising. Each of those counts. The rates here use Claude's underlying per-token rate as an approximation (the exact Cowork pilot billing formula isn't published to us) — use this to build intuition about relative cost, not as an exact forecast.
+            </div>
+            <div class="grid2">
+                <div class="input-group"><label>Input size per step (tokens)</label><input type="number" id="inputTokens" value="3000" oninput="calculateCost()"></div>
+                <div class="input-group"><label>Output size per step (tokens)</label><input type="number" id="outputTokens" value="800" oninput="calculateCost()"></div>
+            </div>
+            <div class="grid2" style="margin-top:14px;">
+                <div class="input-group"><label>Steps this task takes (reading, thinking, drafting, revising)</label><input type="number" id="numSteps" value="15" oninput="calculateCost()"></div>
+            </div>
+            <div id="costResult" class="result">
+                <div>Estimated cost for this one Cowork task:</div>
+                <div class="result-value" id="costValue">$0.0000</div>
+                <div class="result-sub" id="costBreakdownText"></div>
+            </div>
+            <div class="grid2" style="margin-top:14px;">
+                <div class="input-group"><label>Times per week you'd run a task like this</label><input type="number" id="numRequests" value="10" oninput="calculateBulkCost()"></div>
+            </div>
+            <div id="bulkResult" class="result">
+                <div>Weekly spend from your $1,000 credit:</div>
+                <div class="result-value" id="bulkCostValue">$0.00</div>
+                <div class="result-sub" id="bulkWeeksText"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📅 Your Real Budget Timeline (It's Not $1,000 Forever)</h2>
+            <p>Right now, you have a one-time <strong>$1,000 pilot credit</strong> that runs through this pilot period (now through September). It's generous — hard to run out doing normal work, even if you're a little wasteful with it.</p>
+            <div class="warn-box">
+                <strong>From October, it changes.</strong> The one-time $1,000 pot goes away, and it's replaced by an ongoing <strong>monthly</strong> budget instead — <strong>$50/month for most people, $100/month depending on function</strong>. It renews every month, but it's much smaller than $1,000, so from October the habits you build this week actually start to matter.
+            </div>
+            <p>Think of Claude Cowork spend the way a CFO looks at any recurring expense line: approve it when the task's value clearly beats its cost. Gemini Enterprise stays completely free and doesn't touch this budget at all — it remains your default for anything routine, in October and beyond, exactly like it is today.</p>
+            <h3>Will $50 or $100 a month actually be enough?</h3>
+            <p>Using the calculator above (its default numbers land right around $0.53): a solid, multi-step Cowork task typically costs somewhere between <strong>$0.10 and $0.55</strong>. That means:</p>
+            <div class="grid2">
+                <div class="breakdown-item"><div class="breakdown-label">$50/month covers roughly</div><div class="breakdown-value">90–500 tasks</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">$100/month covers roughly</div><div class="breakdown-value">180–1,000 tasks</div></div>
+            </div>
+            <p class="muted">That's several substantial Cowork tasks every single working day. If you keep doing what today's whole session teaches — Gemini first for routine work, Cowork for the genuinely multi-step stuff — you will not run out doing normal work.</p>
+            <h3>How to make it go the furthest</h3>
+            <ul>
+                <li><strong>Default to Gemini</strong> for anything single-step or routine — that doesn't change in October, and it's still free.</li>
+                <li><strong>Save Cowork for tasks that would take you 20-30+ minutes by hand</strong> — multi-file, multi-step, cross-system work is where it earns its cost.</li>
+                <li><strong>When unsure, try Gemini first.</strong> It's free, so there's no downside to trying the cheaper option before reaching for Cowork.</li>
+                <li><strong>Batch similar small asks into one Cowork session</strong> rather than running many tiny separate ones — each new request re-reads everything from scratch, so combining them saves money.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🎯 A Real Wishlist Task, Start to Finish</h2>
+            <p>This one's pulled directly from the EA team's own use-case wishlist — a real, currently-unsolved ask from Swannie: <em>"Creating a Slack message for anniversaries based on WD (Workday, the HR system) reports on a monthly basis automatically. Currently done manually."</em></p>
+            <p>Here's what that actually looks like as a Cowork task, and what it would cost:</p>
+            <ol>
+                <li>Claude reads the team roster / Workday export (~3,000 tokens — a few pages)</li>
+                <li>Cross-references who has a work anniversary this month</li>
+                <li>Drafts a short, personalized message for each person (~500 tokens of output)</li>
+                <li>Posts it to the team's Slack channel</li>
+            </ol>
+            <p class="muted">Each of those 4 items is really 2+ actions behind the scenes (read, then think, then check, then draft, then revise, then post) — that's why the cost below is based on about 8 steps, the same "it's never really just one step" lesson from the Slack DM example earlier.</p>
+            <div class="breakdown">
+                <div class="breakdown-item"><div class="breakdown-label">Steps</div><div class="breakdown-value">~8</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Estimated cost, once a month</div><div class="breakdown-value">~$0.22</div></div>
+            </div>
+            <p class="muted">Run this exact task every single month and it would take over <strong>200 months (18+ years)</strong> to spend a single $50 monthly budget on it alone. The lesson isn't "be scared of Cowork" — it's that one genuinely useful task, run occasionally, is nowhere near the risk. The risk is running many tasks like this every day without ever checking whether Gemini could've done it for free.</p>
+        </div>
+
+        <div class="card">
+            <h2>🔎 Go Deeper: DH's Own Tokenomics Guild (Optional)</h2>
+            <p>DH's FinOps Guild runs a monthly session specifically on getting the most out of AI tokens — real internal content, not something we made up for this workshop. Worth a watch if you want to go beyond today:</p>
+            <ul>
+                <li><a href="https://ai.deliveryhero.net/sections/tokenomics/" target="_blank" rel="noopener">Tokenomics docs</a> (ai.deliveryhero.net, DH login required)</li>
+                <li><a href="https://sites.google.com/deliveryhero.com/dh-finops/tokenomics" target="_blank" rel="noopener">Session recording</a></li>
+                <li><a href="https://docs.google.com/presentation/d/1JdArlLrNUDPBVB_OC4ANd31hVKGzq31qqaqKFYuvppM/edit?usp=sharing" target="_blank" rel="noopener">Slides</a></li>
+            </ul>
+            <p class="muted">One teaser from that session worth knowing: for engineers using the Claude API/Claude Code directly, the single biggest cost driver often isn't the input-vs-output difference — it's <strong>caching</strong> (how much gets re-sent vs. reused between requests). That's mostly relevant to technical, API-level usage rather than Cowork's flat monthly budget, but it's a good rabbit hole if you're curious how the pricing actually works under the hood.</p>
+        </div>
+    </section>
+
+    <!-- ============ 6. USE CASES & HANDS-ON ============ -->
+    <section id="usecases" class="section">
+        <div class="card">
+            <h2>💼 Four Starting Points</h2>
+            <p>No code for any of these — describe the outcome in plain language, similar to the prompts below. Anything in <code>[brackets]</code> is a placeholder — swap it for your own folder name, channel, or details before sending.</p>
+        </div>
+
+        <div class="use-case">
+            <div class="use-case-header"><span class="use-case-title">✅ Warm-Up (No Connector Needed)</span><span class="badge claude">Claude or Gemini</span></div>
+            <p>Before touching any connector, try this one first — it needs nothing set up, so you're guaranteed a working result on your first try.</p>
+            <div class="prompt-box">Draft a short out-of-office reply for me. I'll be away from [date] to [date], and [name] is covering urgent items in the meantime.</div>
+            <p class="muted">Fill in your own dates and name, run it in either tool, and you've already succeeded once before we touch anything connector-dependent.</p>
+        </div>
+
+        <div class="use-case">
+            <div class="use-case-header"><span class="use-case-title">🎂 Birthday & Work-Anniversary Cards</span><span class="badge claude">Claude Cowork</span></div>
+            <div class="prompt-box">Look at the team roster in [folder] and our shared calendar. Find anyone with a birthday or work anniversary in the next 2 weeks. Draft a short, warm message for each. Put the drafts in a new doc for me to review before sending.</div>
+            <p class="muted">Why Cowork, not just "it can read the roster and calendar": Gemini has those same connectors too, so data access isn't the difference. The real reason is the <em>looping</em> — checking every person on the roster one by one and writing a personalized draft for each is exactly the multi-step, repeat-many-times work Cowork is built for. Worth trying in Gemini first anyway (it's free) — reach for Cowork if it stumbles on the "do this for everyone on the list" part.</p>
+        </div>
+        <div class="use-case">
+            <div class="use-case-header"><span class="use-case-title">✈️ Travel Info → Calendar</span><span class="badge claude">Claude Cowork</span></div>
+            <div class="prompt-box">Check my inbox for flight and hotel confirmations from the last 7 days. Create a calendar event for each with flight time, hotel details, and confirmation number. Flag any schedule conflicts.</div>
+            <p class="muted">Same logic: Gemini can also read Gmail and Calendar. What makes this Cowork-shaped is checking potentially several emails, creating an event for each, and then comparing all the new and existing events against each other for conflicts — several linked steps, not a single lookup. Try Gemini first if you like; move to Cowork if it only handles one trip at a time instead of the whole batch.</p>
+        </div>
+        <div class="use-case">
+            <div class="use-case-header"><span class="use-case-title">💬 Slack Channel Summary</span><span class="badge claude">Claude (Chat or Cowork)</span></div>
+            <div class="prompt-box">Summarize what's happened in #[channel] this week. Group by topic, flag anything that needs my decision.</div>
+            <p class="muted">Claude-only: Gemini Enterprise doesn't have a Slack connector. Enable the Slack connector in Claude's settings first.</p>
+        </div>
+        <div class="use-case">
+            <div class="use-case-header"><span class="use-case-title">📅 Meeting Agenda Prep</span><span class="badge gemini">Gemini Enterprise</span></div>
+            <div class="prompt-box">Here's last week's meeting notes and this week's topics [paste both]. Draft a 30-minute agenda with time allocations and one open question per topic.</div>
+            <p class="muted">Single input, single output — the "don't reach for Cowork by default" example.</p>
+        </div>
+
+        <div class="card">
+            <h2>☕ Free Habits You Can Build Today With Gemini</h2>
+            <p>Yash uses a version of this himself: every morning, instead of checking email and calendar separately, a couple of quick asks pull it together — like having a chief of staff hand you a one-page briefing before your day starts. You can build a lightweight version of exactly this with Gemini Enterprise, for free, starting today. Run these three, back to back:</p>
+            <div class="prompt-box">Summarize my unread emails from today, grouped by who needs a reply from me first.</div>
+            <div class="prompt-box">What's on my calendar today? Flag anything back-to-back or double-booked.</div>
+            <div class="prompt-box">Based on my email and calendar this week, what did I say I'd follow up on that I might have missed?</div>
+            <p class="muted">None of this touches your Cowork credit — it's exactly the kind of routine, single-system, daily habit Gemini is meant for. (Slack is part of Yash's own version of this routine, but that piece needs Claude's Slack connector, not Gemini — see the Slack Channel Summary use case above.)</p>
+        </div>
+
+        <div class="card">
+            <h2>💬 Coming Later: Slack's Own AI</h2>
+            <p>Slack is building AI features directly into the product — <strong>channel recaps</strong> (a daily catch-up summary of channels you follow but don't post in) and <strong>thread summaries</strong> (turn a long conversation into a short gist with sources). It's a separate paid add-on (roughly $10-15/user/month depending on plan), and <strong>it isn't confirmed as switched on for us yet</strong> — don't promise it's available today.</p>
+            <p class="muted">Worth watching for: if it's ever enabled here, it'd be another free-at-point-of-use option like Gemini, not something that touches your Cowork budget.</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 The Full EA Wishlist — What to Use, Cost-Consciously</h2>
+            <p>Every open use case from the team's own wishlist sheet, with a cost-conscious recommendation for each. <span class="badge gemini">Gemini Enterprise</span> = free, try it first. <span class="badge claude">Claude Cowork</span> = worth the spend, multi-step. <span class="badge solved">Already Solved</span> = a non-AI tool already handles it. <span class="badge explore">Explore (homework)</span> = not ready to try live today — either it needs a connector or IT step we haven't confirmed yet, needs company-wide permissions beyond your own login (that's IT's to grant, not something you or Cowork can switch on), or just needs a clearer description before it can be sized. Not a "no" in any case.</p>
+            <p class="muted">A few rows below mention "a script" — that just means a small automated program IT builds once, which then runs by itself on a schedule (e.g. every morning) instead of you or the AI doing the task by hand each time.</p>
+            <div style="overflow-x:auto;">
+            <table class="usecase-table">
+                <tr><th>Use case</th><th>Added by</th><th>Why</th></tr>
+                <tr><td>Streamline Birthday Cards with a Gem<br><span class="badge gemini">Gemini Enterprise</span></td><td class="who">Anna</td><td>Build it once as a Gem in Gemini — free, reusable every time.</td></tr>
+                <tr><td>Auto reminders for reports' birthdays/anniversaries<br><span class="badge claude">Claude Cowork</span></td><td class="who">Anna</td><td>Same shape as the Anniversary post worked example above (personalized drafts, not just a date notification) — run it monthly yourself for well under a dollar a month.</td></tr>
+                <tr><td>Reminders for All Hands content submission<br><span class="badge explore">Explore (homework)</span></td><td class="who">Anna</td><td>Not enough detail yet to size — scope it with your team lead first.</td></tr>
+                <tr><td>360 check and reminders<br><span class="badge explore">Explore (homework)</span></td><td class="who">Swannie</td><td>Needs your 360/HR tool connected first — check with IT before trying this in Cowork.</td></tr>
+                <tr><td>Anniversary post<br><span class="badge claude">Claude Cowork</span></td><td class="who">Swannie</td><td>See the worked example above — read WD data, draft, post to Slack, ~$0.22/month.</td></tr>
+                <tr><td>New joiners auto-added to Google Groups<br><span class="badge explore">Explore (homework)</span></td><td class="who">Swannie</td><td>Admin-level Google Groups access — this is an IT automation, not a chat-tool task.</td></tr>
+                <tr><td>Auto clean Google Groups<br><span class="badge explore">Explore (homework)</span></td><td class="who">Swannie</td><td>Same as above — admin-level access, best as an IT script.</td></tr>
+                <tr><td>Cadency check for recurring meetings<br><span class="badge gemini">Gemini Enterprise</span></td><td class="who">Swannie</td><td>Ask Gemini to check your calendar for a pattern any time — free, single-step lookup.</td></tr>
+                <tr><td>Automatic travel info in calendar<br><span class="badge claude">Claude Cowork</span></td><td class="who">Swannie</td><td>Same shape as the Travel Info use case above: checking several emails and cross-referencing them against your calendar for conflicts — several linked steps, not a single lookup.</td></tr>
+                <tr><td>Automatic meeting template in notes<br><span class="badge solved">Already Solved</span></td><td class="who">Swannie</td><td>Google Scripts / Slack Reminder already handles this — no AI needed.</td></tr>
+                <tr><td>Agenda building<br><span class="badge gemini">Gemini Enterprise</span></td><td class="who">Stefanie</td><td>Start with Gemini for a single draft; only move to Cowork if it needs pulling from many calendars/docs at once.</td></tr>
+                <tr><td>Auto delete unused Confluence pages<br><span class="badge explore">Explore (homework)</span></td><td class="who">Swannie</td><td>Deletion automation needs a Confluence connector and IT sign-off regardless of tool.</td></tr>
+                <tr><td>Budget Tracking & Optimization<br><span class="badge explore">Explore (homework)</span></td><td class="who">Stefanie</td><td>Needs SAP/Concur data access — check whether exports can be shared as files first.</td></tr>
+                <tr><td>Summit Planning & Coordination<br><span class="badge explore">Explore (homework)</span></td><td class="who">Stefanie</td><td>Cowork can help with the sheet/email parts; the travel-system integration needs IT first.</td></tr>
+                <tr><td>Automatic birthday/anniversary slide<br><span class="badge claude">Claude Cowork</span></td><td class="who">Swannie</td><td>Cross-references roster + calendar, drafts personalized slides — worth the cost at low monthly frequency.</td></tr>
+                <tr><td>Events calendar<br><span class="badge claude">Claude Cowork</span></td><td class="who">Katia Milene Pinto</td><td>Multi-source build once with Cowork; small updates after that can go back to Gemini.</td></tr>
+                <tr><td>Travel/Expense reminder<br><span class="badge solved">Already Solved</span></td><td class="who">Liangqi Yang</td><td>App Scripts / Email Reminder already handles this — no AI needed.</td></tr>
+                <tr><td>Bday/Anniversary reminder<br><span class="badge solved">Already Solved</span></td><td class="who">Liangqi Yang</td><td>A simple date notification, not personalized drafting — App Scripts / Email Reminder already handles this, no AI needed.</td></tr>
+                <tr><td>Email Triage & Response Assistant<br><span class="badge gemini">Gemini Enterprise</span></td><td class="who">—</td><td>Routine, daily, single-system — exactly what Gemini's Gmail connector is for. Free.</td></tr>
+                <tr><td>Events Calendar (Finance)<br><span class="badge claude">Claude Cowork</span></td><td class="who">Anwesha Roy</td><td>Build the structure once with Cowork; a true daily auto-run is better as a script than a daily paid Cowork run.</td></tr>
+                <tr><td>Google Form notifications<br><span class="badge solved">Already Solved</span></td><td class="who">Oyin Adebiyi</td><td>Slack Workflow already handles this — no AI needed.</td></tr>
+                <tr><td>Auto-invite new joiners to Slack channels<br><span class="badge explore">Explore (homework)</span></td><td class="who">Korinna Tille</td><td>Needs Workday + Slack admin-level integration — an IT project, not an individual chat task.</td></tr>
+                <tr><td>AI Time Saving Assistance<br><span class="badge gemini">Gemini Enterprise</span></td><td class="who">—</td><td>Quick budget/task tracking and reminders as you go — free for the simple version.</td></tr>
+                <tr><td>Automated Workday reports<br><span class="badge explore">Explore (homework)</span></td><td class="who">Rose Mullen</td><td>If you already receive these as files by email, Cowork can process them today; automatically pulling live from Workday itself needs a data connection we haven't set up yet.</td></tr>
+                <tr><td>Business Knowledge Summary<br><span class="badge gemini">Gemini Enterprise</span></td><td class="who">Awo Twumasi</td><td>Drafting planning docs/trackers from what you already have — start free with Gemini.</td></tr>
+                <tr><td>Google/Slack group maintenance<br><span class="badge explore">Explore (homework)</span></td><td class="who">Amanda Hylleberg Andersen</td><td>Admin-level access needed — an IT automation, not a chat-tool task.</td></tr>
+                <tr><td>Automate team office attendance<br><span class="badge explore">Explore (homework)</span></td><td class="who">Katia Milene Pinto</td><td>No detail yet — scope it with your team lead first.</td></tr>
+                <tr><td>Birthdays/Anniversaries — deck + email + Slack<br><span class="badge claude">Claude Cowork</span></td><td class="who">Elisabeth Gray</td><td>Multi-format, multi-channel output — a strong, worthwhile Cowork task.</td></tr>
+                <tr><td>Automated Multi-Source Data consolidation<br><span class="badge claude">Claude Cowork</span></td><td class="who">Micaela Maria Garcia</td><td>Textbook Cowork task: multiple inconsistent files → one clean source of truth.</td></tr>
+                <tr><td>Team Event analysis<br><span class="badge claude">Claude Cowork</span></td><td class="who">Swannie Virapin</td><td>Cross-references RSVPs and documents — works well if the data's already in accessible sheets/docs.</td></tr>
+            </table>
+            </div>
+            <p class="muted">Source: the EA team's own use-case wishlist sheet. "Explore (homework)" isn't a rejection — it just means a connector or IT step needs confirming before trying it live.</p>
+        </div>
+
+        <div class="card">
+            <h2>🙋 Your Turn</h2>
+            <ol class="step-list">
+                <li>Pick one use case above, or bring your own real (low-risk) task.</li>
+                <li>Open the right tool based on what you learned in Compare & Cost.</li>
+                <li>If it needs files, grant it a dedicated folder first (not broad access).</li>
+                <li>Describe the outcome you want in plain language — no special syntax.</li>
+                <li>Review what comes back before anything gets sent or acted on.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- ============ 7. FAQ ============ -->
+    <section id="faq" class="section">
+        <div class="card"><h2>❓ Common Questions</h2><p class="muted">Click to copy any answer.</p></div>
+        <div class="snippet" onclick="copySnippet(this)">
+            <strong>Q: Can Claude or Gemini see files I haven't connected/shared?</strong>
+            <code>A: No. Both only access what you've explicitly connected or shared, and both inherit your existing permissions — if you can't see it today, connecting the assistant doesn't change that.</code>
+            <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+        </div>
+        <div class="snippet" onclick="copySnippet(this)">
+            <strong>Q: What's the difference between "Claude in Slack" and the "Slack connector"?</strong>
+            <code>A: "Claude in Slack" is Claude as an app you message directly inside Slack. The Slack connector (turned on in Claude's settings) lets Claude search your Slack workspace as background context in any conversation. They're separate — you may want both.</code>
+            <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+        </div>
+        <div class="snippet" onclick="copySnippet(this)">
+            <strong>Q: Do I need Claude Code?</strong>
+            <code>A: No — Claude Code is a separate tool just for software engineers who write code. Chat and Cowork cover everything an EA & TA workflow needs.</code>
+            <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+        </div>
+        <div class="snippet" onclick="copySnippet(this)">
+            <strong>Q: Why not always use Claude Cowork since it's more capable?</strong>
+            <code>A: Gemini Enterprise is included in our license with no usage cost, so it's free to reach for anytime. Claude Cowork draws down your $1,000 pilot credit. For quick, well-defined work, Gemini gets the same result without touching that budget — save Cowork for tasks where the extra capability actually changes the outcome.</code>
+            <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+        </div>
+        <div class="snippet" onclick="copySnippet(this)">
+            <strong>Q: What happens if I run out of my $1,000 credit?</strong>
+            <code>A: Based on typical usage (see the budget calculator), this shouldn't happen during the pilot. We honestly don't know the exact cutoff behavior yet — that's part of what this pilot is figuring out. If you're getting close, tell your workshop lead right away so it can be topped up before it becomes a problem.</code>
+            <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+        </div>
+        <div class="snippet" onclick="copySnippet(this)">
+            <strong>Q: Sign-in isn't working — what do I try first?</strong>
+            <code>A: Log all the way out and back in again — not just close and reopen the app, and not just restart your laptop. That fixes it most of the time. Still stuck? Flag a trainer.</code>
+            <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+        </div>
+        <div class="snippet" onclick="copySnippet(this)">
+            <strong>Q: If I run out of budget, can I switch to my own personal Claude subscription instead?</strong>
+            <code>A: No — that's not compliant with company policy. If you're close to running out, tell your workshop lead so more credit can be added the right way.</code>
+            <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+        </div>
+        <div class="snippet" onclick="copySnippet(this)">
+            <strong>Q: Is this the same $1,000 credit as the AI budget some engineering teams talk about?</strong>
+            <code>A: No — that's a separate system for a different product (Claude Code, used by developers through a tool called LiteLLM). Your $1,000 Cowork credit is its own thing, just for this pilot.</code>
+            <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+        </div>
+        <div class="snippet" onclick="copySnippet(this)">
+            <strong>Q: Why does it keep asking me to approve every single step?</strong>
+            <code>A: That's a safety feature, not a bug — it's making sure nothing happens without your OK. If it feels like too much for routine, safe actions, ask your workshop lead — there may be a setting to reduce how often it asks.</code>
+            <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+        </div>
+    </section>
+
+    <footer>Built for the EA &amp; TA Cowork workshop · Jul 8, 2026 · Internal use only</footer>
+</div>
+
+<script>
+    const coworkRate = { input: 5.00, output: 25.00, label: 'Claude Cowork' };
+    const docTokensPerPage = { prose: 600, slides: 250, spreadsheet: 900 };
+
+    function showTab(tabName, button) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        if (button) button.classList.add('active');
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('cowork_darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    function countTokens() {
+        const text = document.getElementById('tokenInput').value;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        document.getElementById('wordCount').textContent = words;
+        document.getElementById('estTokens').textContent = Math.ceil(words * 1.3);
+    }
+
+    function calcDocTokens() {
+        const pages = parseFloat(document.getElementById('docPages').value) || 0;
+        const type = document.getElementById('docType').value;
+        const tokens = Math.round(pages * docTokensPerPage[type]);
+        document.getElementById('docTokenEstimate').textContent = tokens.toLocaleString();
+    }
+
+    function calculateCost() {
+        const inputTokens = parseFloat(document.getElementById('inputTokens').value) || 0;
+        const outputTokens = parseFloat(document.getElementById('outputTokens').value) || 0;
+        const numSteps = parseFloat(document.getElementById('numSteps').value) || 1;
+        const inputCost = (inputTokens / 1000000) * coworkRate.input * numSteps;
+        const outputCost = (outputTokens / 1000000) * coworkRate.output * numSteps;
+        const totalCost = inputCost + outputCost;
+        document.getElementById('costValue').textContent = '$' + totalCost.toFixed(4);
+        document.getElementById('costBreakdownText').textContent = `${numSteps} steps × ${coworkRate.label} rates: $${inputCost.toFixed(4)} in + $${outputCost.toFixed(4)} out`;
+        calculateBulkCost();
+    }
+
+    function calculateBulkCost() {
+        const numRequests = parseFloat(document.getElementById('numRequests').value) || 0;
+        const costText = document.getElementById('costValue').textContent;
+        const costPerRequest = parseFloat(costText.replace('$', '')) || 0;
+        const weeklyCost = costPerRequest * numRequests;
+        document.getElementById('bulkCostValue').textContent = '$' + weeklyCost.toFixed(2);
+        const weeksLeft = weeklyCost > 0 ? (1000 / weeklyCost).toFixed(0) : '∞';
+        document.getElementById('bulkWeeksText').textContent = weeklyCost > 0 ? `At this pace, your $1,000 credit lasts roughly ${weeksLeft} weeks.` : 'Enter a request count above.';
+    }
+
+    function toggleAnswer(element) { element.querySelector('.scenario-answer').classList.toggle('show'); }
+
+    function updateHuntProgress() {
+        const boxes = document.querySelectorAll('#huntList input[type="checkbox"]');
+        const checked = Array.from(boxes).filter(b => b.checked).length;
+        document.getElementById('huntProgress').textContent = `${checked} / ${boxes.length} connected`;
+    }
+
+    function copySnippet(element) {
+        const strong = element.querySelector('strong').textContent;
+        const code = element.querySelector('code').textContent;
+        navigator.clipboard.writeText(strong + '\n' + code);
+        const btn = element.querySelector('.copy-btn');
+        const original = btn.textContent;
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => btn.textContent = original, 2000);
+    }
+
+    function dtAnswer(step, value) {
+        if (step === 'q1') {
+            document.getElementById('dtStep1').style.display = 'none';
+            if (value === 'yes') { document.getElementById('dtResultGeminiSimple').classList.add('show'); }
+            else { document.getElementById('dtStep2').style.display = 'block'; }
+        } else if (step === 'q2') {
+            document.getElementById('dtStep2').style.display = 'none';
+            if (value === 'yes') { document.getElementById('dtResultClaude').classList.add('show'); }
+            else { document.getElementById('dtResultGeminiModerate').classList.add('show'); }
+        }
+    }
+
+    function dtRestart() {
+        document.querySelectorAll('.dt-result').forEach(r => r.classList.remove('show'));
+        document.getElementById('dtStep2').style.display = 'none';
+        document.getElementById('dtStep1').style.display = 'block';
+    }
+
+    if (localStorage.getItem('cowork_darkMode') === 'true') document.body.classList.add('dark-mode');
+    countTokens();
+    calcDocTokens();
+    calculateCost();
+</script>
+</body>
+</html>
