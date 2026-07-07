@@ -185,7 +185,10 @@
 <body class="pw-locked">
 <div id="pw-gate">
     <h2>🔒 This training portal is password-protected</h2>
-    <input type="password" id="pwInput" placeholder="Enter password" autocomplete="off">
+    <div style="position:relative; display:flex; align-items:center;">
+        <input type="password" id="pwInput" placeholder="Enter password" autocomplete="off" style="padding-right:38px;">
+        <span id="pwToggle" onclick="togglePwVisibility()" style="position:absolute; right:10px; cursor:pointer; font-size:16px; user-select:none;" title="Show/hide password">👁️</span>
+    </div>
     <button onclick="checkPassword()">Unlock</button>
     <div class="pw-error" id="pwError"></div>
 </div>
@@ -792,24 +795,34 @@
 </div>
 
 <script>
-    const PW_HASH = '11f5727cad32fafad99595c41106dec0c84de3496e6c065c24aea95959b6f67c';
-    async function sha256Hex(text) {
-        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    const PW_HASH = '80f74085';
+    function simpleHash(str) {
+        let hash = 5381;
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) + hash + str.charCodeAt(i)) >>> 0;
+        }
+        return hash.toString(16);
     }
-    async function checkPassword() {
+    function checkPassword() {
         const input = document.getElementById('pwInput').value;
-        const hash = await sha256Hex(input);
-        if (hash === PW_HASH) {
+        if (simpleHash(input) === PW_HASH) {
             document.body.classList.remove('pw-locked');
+            document.getElementById('pw-gate').style.display = 'none';
             localStorage.setItem('cowork_pw_unlocked', 'true');
         } else {
             document.getElementById('pwError').textContent = 'Incorrect password, try again.';
             document.getElementById('pwInput').value = '';
         }
     }
+    function togglePwVisibility() {
+        const input = document.getElementById('pwInput');
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
     document.getElementById('pwInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
-    if (localStorage.getItem('cowork_pw_unlocked') === 'true') document.body.classList.remove('pw-locked');
+    if (localStorage.getItem('cowork_pw_unlocked') === 'true') {
+        document.body.classList.remove('pw-locked');
+        document.getElementById('pw-gate').style.display = 'none';
+    }
 
     const coworkRate = { input: 5.00, output: 25.00, label: 'Claude Cowork' };
     const docTokensPerPage = { prose: 600, slides: 250, spreadsheet: 900 };
