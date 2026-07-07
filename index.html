@@ -205,6 +205,10 @@
                 Both tools can get a name wrong, misread a document, or make up a detail that sounds real but isn't — confidently, without flagging any doubt. That's exactly why every task today ends with "check it before you send or act on it." Not a formality — a real possibility every single time.
             </div>
             <div class="warn-box">
+                <strong>⚠️ What if it already did the wrong thing — like sending an email you told it not to send?</strong>
+                Both tools are supposed to ask for your approval before sending an email, posting a message, or creating something outside the chat — if you didn't see an approval step, that's unusual and worth flagging to your workshop lead. If something did go out that shouldn't have: check Gmail's own "Undo Send" first (only works for a few seconds after sending), and if it's too late for that, send a quick follow-up to the recipient correcting it rather than hoping no one noticed. Going forward, be explicit in your instruction ("draft this, don't send it") rather than assuming caution by default.
+            </div>
+            <div class="warn-box">
                 <strong>⚠️ Don't paste passwords or sensitive personal data into the chat.</strong>
                 Don't type in passwords, credit card numbers, or someone's private ID/SSN-type information directly as part of a request. This is separate from folder access (covered in Connectors) — this is about what you type, not just what files you grant access to.
             </div>
@@ -267,6 +271,16 @@
                 <li>Avoid granting broad access "just in case" — especially for anything sensitive (financial documents, contracts, personal records).</li>
             </ul>
             <p class="muted">This is the same idea as giving a new contractor a key to one room, not the whole building — it's not about distrust, it's just good practice to limit access.</p>
+        </div>
+        <div class="card">
+            <h2>Give It Standing Context: Projects (Chat) and Folders (Cowork)</h2>
+            <p>Both tools let you set up context <em>once</em> and reuse it every time, instead of re-explaining the same background in every conversation:</p>
+            <ul>
+                <li><strong>Claude Chat has "Projects"</strong> — a space where you attach files and instructions once, and every conversation you start inside that Project already has that context.</li>
+                <li><strong>Claude Cowork uses folders the same way</strong> (see above) — one dedicated folder holds everything related to that stakeholder or task.</li>
+            </ul>
+            <p>Example: imagine an EA — call her Amanda — supports a senior stakeholder full-time. Instead of re-explaining "here's how they like updates formatted" and "here's what's currently on their plate" every single time, Amanda creates one Project (or one Cowork folder) for that stakeholder: their preferred communication style, the recurring topics and initiatives, meeting cadence and prep format. Every future request — draft an update, prep an agenda, summarize something for them — starts from that context instead of a blank page.</p>
+            <p class="muted">Worth setting up for anyone you support regularly — it pays for itself after the second or third time you'd otherwise have re-typed the same background.</p>
         </div>
     </section>
 
@@ -584,6 +598,26 @@
 
     <!-- ============ 6. USE CASES & HANDS-ON ============ -->
     <section id="usecases" class="section">
+        <div class="card">
+            <h2>✍️ Writing a Good Prompt: the RCT Method</h2>
+            <p>Before the prompts below, one quick framework so yours turn out well too. Think of the AI as a really capable colleague with amnesia — it knows a huge amount, but remembers nothing about your situation unless you tell it. RCT is a simple way to give it what it needs, every time:</p>
+            <ul>
+                <li><strong>R — Role:</strong> who should it act as? ("You're helping me as an executive assistant would...")</li>
+                <li><strong>C — Context:</strong> what's the situation? (who it's for, what's already true, any constraints)</li>
+                <li><strong>T — Task:</strong> exactly what do you want done?</li>
+            </ul>
+            <div class="grid2">
+                <div class="input-group">
+                    <label>❌ Weak prompt</label>
+                    <div class="prompt-box" style="margin:0;">Write a birthday message.</div>
+                </div>
+                <div class="input-group">
+                    <label>✅ Strong prompt (RCT)</label>
+                    <div class="prompt-box" style="margin:0;">You're helping me write team birthday messages [Role]. It's for a colleague on my team turning a work anniversary this week, and our team culture is warm but not overly formal [Context]. Draft a 3-sentence message I can personalize with their name before sending [Task].</div>
+                </div>
+            </div>
+            <p class="muted">The weak version forces the AI to guess your tone, audience, and length — you'll get something generic and probably rewrite it anyway. The strong version gets it right closer to the first try, which is exactly why it's worth the extra sentence.</p>
+        </div>
         <div class="card">
             <h2>💼 Four Starting Points</h2>
             <p>No code for any of these — describe the outcome in plain language, similar to the prompts below. Anything in <code>[brackets]</code> is a placeholder — swap it for your own folder name, channel, or details before sending.</p>
