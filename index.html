@@ -681,14 +681,14 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
         </div>
 
         <div class="use-case">
-            <div class="use-case-header"><span class="use-case-title">🎂 Birthday & Work-Anniversary Cards</span><span class="badge claude">Claude Cowork</span></div>
+            <div class="use-case-header"><span class="use-case-title">🎂 Birthday & Work-Anniversary Cards</span><span class="badge gemini">Gemini Enterprise</span></div>
             <div class="prompt-box">Look at the team roster in [folder] and our shared calendar. Find anyone with a birthday or work anniversary in the next 2 weeks. Draft a short, warm message for each. Put the drafts in a new doc for me to review before sending.</div>
-            <p class="muted">Why Cowork, not just "it can read the roster and calendar": Gemini has those same connectors too, so data access isn't the difference. The real reason is the <em>looping</em> — checking every person on the roster one by one and writing a personalized draft for each is exactly the multi-step, repeat-many-times work Cowork is built for. Worth trying in Gemini first anyway (it's free) — reach for Cowork if it stumbles on the "do this for everyone on the list" part.</p>
+            <p class="muted">Start with Gemini — calendar and roster reads tend to be faster there since it's Google's own product working with Google's own Calendar. Only reach for Cowork if you need it to loop through a long roster in one continuous run and Gemini stalls partway through.</p>
         </div>
         <div class="use-case">
-            <div class="use-case-header"><span class="use-case-title">✈️ Travel Info → Calendar</span><span class="badge claude">Claude Cowork</span></div>
+            <div class="use-case-header"><span class="use-case-title">✈️ Travel Info → Calendar</span><span class="badge gemini">Gemini Enterprise</span></div>
             <div class="prompt-box">Check my inbox for flight and hotel confirmations from the last 7 days. Create a calendar event for each with flight time, hotel details, and confirmation number. Flag any schedule conflicts.</div>
-            <p class="muted">Same logic: Gemini can also read Gmail and Calendar. What makes this Cowork-shaped is checking potentially several emails, creating an event for each, and then comparing all the new and existing events against each other for conflicts — several linked steps, not a single lookup. Try Gemini first if you like; move to Cowork if it only handles one trip at a time instead of the whole batch.</p>
+            <p class="muted">Same logic: Gemini's Calendar access is native and fast, which matters more here than which tool is theoretically more capable. Try Gemini first for this one — move to Cowork only if you have a genuinely large batch of trips and Gemini only handles one at a time.</p>
         </div>
         <div class="use-case">
             <div class="use-case-header"><span class="use-case-title">💬 Slack Channel Summary</span><span class="badge claude">Claude (Chat or Cowork)</span></div>
@@ -731,7 +731,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
                 <tr><td>New joiners auto-added to Google Groups<br><span class="badge explore">Explore (homework)</span></td><td class="who">Swannie</td><td>Admin-level Google Groups access — this is an IT automation, not a chat-tool task.</td></tr>
                 <tr><td>Auto clean Google Groups<br><span class="badge explore">Explore (homework)</span></td><td class="who">Swannie</td><td>Same as above — admin-level access, best as an IT script.</td></tr>
                 <tr><td>Cadency check for recurring meetings<br><span class="badge gemini">Gemini Enterprise</span></td><td class="who">Swannie</td><td>Ask Gemini to check your calendar for a pattern any time — free, single-step lookup.</td></tr>
-                <tr><td>Automatic travel info in calendar<br><span class="badge claude">Claude Cowork</span></td><td class="who">Swannie</td><td>Same shape as the Travel Info use case above: checking several emails and cross-referencing them against your calendar for conflicts — several linked steps, not a single lookup.</td></tr>
+                <tr><td>Automatic travel info in calendar<br><span class="badge gemini">Gemini Enterprise</span></td><td class="who">Swannie</td><td>Same shape as the Travel Info use case above: try Gemini first for speed (native Calendar access); move to Cowork only for a large batch of trips at once.</td></tr>
                 <tr><td>Automatic meeting template in notes<br><span class="badge solved">Already Solved</span></td><td class="who">Swannie</td><td>Google Scripts / Slack Reminder already handles this — no AI needed.</td></tr>
                 <tr><td>Agenda building<br><span class="badge gemini">Gemini Enterprise</span></td><td class="who">Stefanie</td><td>Start with Gemini for a single draft; only move to Cowork if it needs pulling from many calendars/docs at once.</td></tr>
                 <tr><td>Auto delete unused Confluence pages<br><span class="badge explore">Explore (homework)</span></td><td class="who">Swannie</td><td>Deletion automation needs a Confluence connector and IT sign-off regardless of tool.</td></tr>
@@ -810,12 +810,9 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
 
         <div class="card" id="s-usage">
             <h2>Usage: Check Your Monthly Spend in Real Time</h2>
-            <p>Settings → <strong>Usage</strong>. This shows exactly how much of your monthly limit you've used, updated live. Your Enterprise plan limit is <strong>$500/month</strong>, resetting at the start of each month. You can view spend broken down by day or week, and grouped by product.</p>
+            <p>Settings → <strong>Usage</strong>. This shows exactly how much of your limit you've used, updated live, plus spend broken down by day or week and grouped by product.</p>
             <img src="settings/usage.png" class="ss" alt="Usage settings showing spend against monthly limit">
-            <p class="muted">Only Claude Cowork usage appears here. Gemini Enterprise is free and never shows up in this counter — so if the number looks low, that's expected: most routine work runs through Gemini, not Cowork.</p>
-            <div class="warn-box">
-                <strong>From October, your limit changes to $50 or $100/month</strong> — the $500 is a pilot-period amount. The habits you build now (Gemini first for routine work, Cowork for multi-step tasks) are exactly what will keep you well within that lower limit later. See the Compare &amp; Cost tab for the full budget timeline.
-            </div>
+            <p class="muted">The screenshot above shows this screen for one specific account — your own number will very likely look different, since limits vary by role. For the general EA/TA pilot allocation, see the Budget Timeline in the Compare &amp; Cost tab ($1,000 one-time pilot credit through September, then $50-$100/month from October depending on function). Only Claude Cowork usage appears here — Gemini Enterprise is free and never shows up in this counter, so if the number looks low, that's expected: most routine work runs through Gemini, not Cowork.</p>
         </div>
 
         <div class="card" id="s-capabilities">
@@ -826,9 +823,9 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
                 <tbody>
                     <tr><td><strong>Search and reference chats</strong></td><td>Claude can look back at past conversations for relevant context — so it remembers a preference you set two weeks ago without you repeating it.</td><td>Keep ON</td></tr>
                     <tr><td><strong>Generate memory from chat history</strong></td><td>Claude gradually builds a persistent memory about you — your preferences, recurring topics, how you work.</td><td>Keep ON</td></tr>
+                    <tr><td><strong>Tool access mode</strong></td><td>Controls how connector tools load in new conversations (default: "Load tools when needed").</td><td>Leave on default</td></tr>
                     <tr><td><strong>Connector search</strong></td><td>Claude automatically surfaces the right connectors (Slack, Gmail, etc.) for your conversation without you needing to name them explicitly.</td><td>Keep ON</td></tr>
-                    <tr><td><strong>Artifacts</strong></td><td>Shows documents, code, and rich output in a side panel rather than inline in the chat — cleaner to review and copy from.</td><td>Keep ON</td></tr>
-                    <tr><td><strong>Inline visualizations</strong></td><td>Charts, diagrams, and tables render directly in the conversation.</td><td>Keep ON</td></tr>
+                    <tr><td><strong>Switch models when a message is flagged</strong></td><td>If a safety check flags a message, Claude automatically switches to a different model to keep the conversation going instead of just pausing it.</td><td>Keep ON</td></tr>
                     <tr><td><strong>Location metadata</strong></td><td>Lets Claude use your rough city/region to improve responses.</td><td>Your choice — OFF by default</td></tr>
                 </tbody>
             </table>
@@ -883,18 +880,14 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
             <h2>Customize → Connectors: What's Connected and How to Add More</h2>
             <p>Settings → Customize → <strong>Connectors</strong>. This is the single place to see every connector, check its status, and connect new ones. Connected ones show a checkmark — anything showing a <strong>Connect</strong> button hasn't been authorized yet.</p>
             <img src="settings/connectors.png" class="ss" alt="Connectors settings showing connected and available connectors">
-            <p>Currently connected in your setup:</p>
+            <p class="muted">The screenshot above shows one specific account (with several extra integrations from that person's own engineering work) — your own list will very likely be shorter. The ones that actually matter for your EA/TA work are the same four covered all through today:</p>
             <div class="grid3">
-                <div class="breakdown-item"><div class="breakdown-label">Asana</div><div class="breakdown-value" style="font-size:12px;">Web + Custom</div></div>
-                <div class="breakdown-item"><div class="breakdown-label">Atlassian Rovo</div><div class="breakdown-value" style="font-size:12px;">Jira + Confluence</div></div>
-                <div class="breakdown-item"><div class="breakdown-label">GitHub</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
-                <div class="breakdown-item"><div class="breakdown-label">Gmail</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
-                <div class="breakdown-item"><div class="breakdown-label">Google Calendar</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
-                <div class="breakdown-item"><div class="breakdown-label">Google Drive</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
                 <div class="breakdown-item"><div class="breakdown-label">Slack</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
-                <div class="breakdown-item"><div class="breakdown-label">iMessages</div><div class="breakdown-value" style="font-size:12px;">Desktop</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Gmail</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Google Drive</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Google Calendar</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
             </div>
-            <p style="margin-top:14px;">To connect a new one: click the <strong>Connect</strong> button next to it, complete the browser authorization flow (you'll be asked to log into that service and grant access), then come back — it will show a checkmark. If the authorization fails or you see an error, flag it: the connector may not be enabled at the organization level yet, which is something IT needs to switch on, not something you can fix yourself.</p>
+            <p style="margin-top:14px;">To connect one: click the <strong>Connect</strong> button next to it, complete the browser authorization flow (you'll be asked to log into that service and grant access), then come back — it will show a checkmark. If the authorization fails or you see an error, flag it: the connector may not be enabled at the organization level yet, which is something IT needs to switch on, not something you can fix yourself.</p>
             <p class="muted">The "Build Together" section of this training walks through connecting each connector live — come back to this page if you need to check status or reconnect one after the workshop.</p>
         </div>
 
