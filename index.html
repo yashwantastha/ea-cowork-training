@@ -169,6 +169,13 @@
 
     footer { text-align: center; padding: 20px; font-size: 12px; color: #999; }
 
+    .ss { width: 100%; max-width: 680px; border-radius: 10px; border: 1px solid #d2d2d7; margin: 14px 0; display: block; box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
+    body.dark-mode .ss { border-color: #3a3b3d; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+    .settings-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+    .settings-nav a { padding: 6px 14px; background: #f5f5f7; border-radius: 20px; font-size: 12px; font-weight: 500; color: #1d1d1f; text-decoration: none; border: 1px solid #e5e5e7; }
+    body.dark-mode .settings-nav a { background: #2c2d2f; color: #e6e6e6; border-color: #3a3b3d; }
+    .settings-nav a:hover { border-color: #cc785c; color: #cc785c; }
+
     #pw-gate { position: fixed; inset: 0; background: #1d1d1f; color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; flex-direction: column; gap: 14px; text-align: center; padding: 20px; }
     #pw-gate h2 { font-size: 20px; }
     #pw-gate input { font-size: 16px; padding: 10px 14px; border-radius: 8px; border: 1px solid #555; width: 240px; text-align: center; }
@@ -212,6 +219,7 @@
         <button class="tab-btn" onclick="showTab('buildtogether', this)">🔧 Build Together</button>
         <button class="tab-btn" onclick="showTab('compare', this)">⚖️ Compare & Cost</button>
         <button class="tab-btn" onclick="showTab('usecases', this)">💼 Use Cases & Hands-On</button>
+        <button class="tab-btn" onclick="showTab('settings', this)">⚙️ Cowork Settings</button>
         <button class="tab-btn" onclick="showTab('faq', this)">❓ FAQ</button>
     </nav>
 
@@ -741,7 +749,164 @@
         </div>
     </section>
 
-    <!-- ============ 7. FAQ ============ -->
+    <!-- ============ 7. COWORK SETTINGS ============ -->
+    <section id="settings" class="section">
+
+        <div class="card">
+            <h2>⚙️ How to Open Settings</h2>
+            <p>Click your <strong>name at the bottom-left</strong> of the app → <strong>Settings</strong>. On Mac you can also press <strong>⌘,</strong> from anywhere in the app. A settings panel opens with sections on the left — the ones that matter for your day-to-day work are covered below.</p>
+            <div class="settings-nav">
+                <a href="#s-profile">Profile & Instructions</a>
+                <a href="#s-usage">Usage & Spend</a>
+                <a href="#s-capabilities">Capabilities</a>
+                <a href="#s-cowork">Cowork Settings</a>
+                <a href="#s-desktop">Desktop Shortcut</a>
+                <a href="#s-connectors">Connectors</a>
+                <a href="#s-plugins">Plugins</a>
+            </div>
+            <img src="settings/settings-menu.png" class="ss" alt="Opening Settings from the bottom-left menu">
+            <p class="muted">The menu above appears when you click your name. "Settings" (⌘,) opens the full panel. "Organization settings" is read-only — it's managed by IT, not you.</p>
+        </div>
+
+        <div class="card" id="s-profile">
+            <h2>General → Profile: Give Claude Standing Context</h2>
+            <p>The <strong>Instructions for Claude</strong> field is the most impactful setting most people never touch. Whatever you write here applies automatically to every chat and every Cowork session — you never have to repeat the same background again.</p>
+            <p>Think of it as a permanent briefing. Useful things to include:</p>
+            <ul>
+                <li>Your role, team, and who you support</li>
+                <li>How your stakeholders like to receive information (BLUF, formal, short)</li>
+                <li>Preferred output format ("always end emails with my name", "use tables over bullet lists")</li>
+                <li>Any standing context about ongoing projects or recurring tasks</li>
+            </ul>
+            <img src="settings/general-profile.png" class="ss" alt="General settings showing Profile and Instructions for Claude">
+            <p class="muted">Also set <strong>"What should Claude call you?"</strong> — small detail, but it makes responses feel less generic. The <strong>Work description</strong> dropdown helps Claude default to the right kind of output for your context.</p>
+            <div class="warn-box">
+                <strong>Don't paste passwords or sensitive IDs here.</strong>
+                The Instructions field is stored in your account. It's fine for role context, stakeholder preferences, and format rules — not for anything you'd treat as a credential.
+            </div>
+        </div>
+
+        <div class="card" id="s-usage">
+            <h2>Usage: Check Your Monthly Spend in Real Time</h2>
+            <p>Settings → <strong>Usage</strong>. This shows exactly how much of your monthly limit you've used, updated live. Your Enterprise plan limit is <strong>$500/month</strong>, resetting at the start of each month. You can view spend broken down by day or week, and grouped by product.</p>
+            <img src="settings/usage.png" class="ss" alt="Usage settings showing spend against monthly limit">
+            <p class="muted">Only Claude Cowork usage appears here. Gemini Enterprise is free and never shows up in this counter — so if the number looks low, that's expected: most routine work runs through Gemini, not Cowork.</p>
+            <div class="warn-box">
+                <strong>From October, your limit changes to $50 or $100/month</strong> — the $500 is a pilot-period amount. The habits you build now (Gemini first for routine work, Cowork for multi-step tasks) are exactly what will keep you well within that lower limit later. See the Compare &amp; Cost tab for the full budget timeline.
+            </div>
+        </div>
+
+        <div class="card" id="s-capabilities">
+            <h2>Capabilities: What to Leave On and Why</h2>
+            <p>Settings → <strong>Capabilities</strong>. Most of these are already set correctly. Here's what each relevant toggle actually does:</p>
+            <table>
+                <thead><tr><th>Setting</th><th>What it does</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Search and reference chats</strong></td><td>Claude can look back at past conversations for relevant context — so it remembers a preference you set two weeks ago without you repeating it.</td><td>Keep ON</td></tr>
+                    <tr><td><strong>Generate memory from chat history</strong></td><td>Claude gradually builds a persistent memory about you — your preferences, recurring topics, how you work.</td><td>Keep ON</td></tr>
+                    <tr><td><strong>Connector search</strong></td><td>Claude automatically surfaces the right connectors (Slack, Gmail, etc.) for your conversation without you needing to name them explicitly.</td><td>Keep ON</td></tr>
+                    <tr><td><strong>Artifacts</strong></td><td>Shows documents, code, and rich output in a side panel rather than inline in the chat — cleaner to review and copy from.</td><td>Keep ON</td></tr>
+                    <tr><td><strong>Inline visualizations</strong></td><td>Charts, diagrams, and tables render directly in the conversation.</td><td>Keep ON</td></tr>
+                    <tr><td><strong>Location metadata</strong></td><td>Lets Claude use your rough city/region to improve responses.</td><td>Your choice — OFF by default</td></tr>
+                </tbody>
+            </table>
+            <img src="settings/capabilities.png" class="ss" alt="Capabilities settings showing Memory and General toggles">
+            <p class="muted">"View and manage memory" (the button under the memory toggles) lets you see and delete anything Claude has remembered about you. Worth checking after a few weeks of use — you can prune anything that's outdated or wrong.</p>
+        </div>
+
+        <div class="card" id="s-cowork">
+            <h2>Cowork Settings: The Section Built for Your Work</h2>
+            <p>Settings → <strong>Cowork</strong>. Three distinct settings here, all worth understanding:</p>
+            <img src="settings/cowork-settings.png" class="ss" alt="Cowork settings showing files, trusted folders, and global instructions">
+
+            <h3>Cowork files</h3>
+            <p>Where Cowork stores your artifacts and any scheduled tasks you've set up. Default location is fine — only change this if IT specifically asks you to point it somewhere else.</p>
+
+            <h3>Trusted Cowork folders</h3>
+            <p>Normally, every time you start a Cowork session and attach a folder, it asks you to confirm access. <strong>Trusted folders skip that confirmation</strong> — Claude connects to them immediately without the approval dialog.</p>
+            <p>Add any folder you use regularly: a team prep folder, your executive's shared drive folder, a recurring project folder. You set it once, and every future Cowork session attaches it silently.</p>
+            <div class="warn-box">
+                <strong>Only trust folders you'd always be comfortable granting access to.</strong>
+                The confirmation dialog exists for a reason — it's a reminder of what Claude can see. Skip it only for folders where "always grant access" is genuinely always true.
+            </div>
+
+            <h3>Global instructions</h3>
+            <p>Like the Instructions for Claude field in General settings, but <strong>specific to Cowork sessions only</strong>. Anything here applies to every Cowork task, every time — even if you don't mention it.</p>
+            <p>Use it for things that only matter when Claude is doing multi-step work on your files:</p>
+            <ul>
+                <li>File naming conventions ("always name outputs YYYY-MM-DD_description")</li>
+                <li>Output format rules ("all documents should start with a one-line summary")</li>
+                <li>Standing context about a process you run regularly ("I run a monthly team update for 8 direct reports across 3 regions")</li>
+                <li>What to do if something is unclear ("ask before creating any new files, don't assume")</li>
+            </ul>
+            <p class="muted">The more specific and concrete this is, the less you have to re-explain at the start of each session. Think of it like an onboarding doc you'd give a new contractor — once written, it does the work for you every time.</p>
+        </div>
+
+        <div class="card" id="s-desktop">
+            <h2>Desktop App → General: The Shortcut Worth Knowing</h2>
+            <p>Settings → Desktop app → <strong>General</strong>. Most of these are set well by default. Two worth knowing:</p>
+            <img src="settings/desktop-general.png" class="ss" alt="Desktop General settings showing startup and quick access options">
+            <table>
+                <thead><tr><th>Setting</th><th>What it does</th><th>Note</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Quick access shortcut</strong></td><td>Default: <strong>tap Option twice</strong> (Mac). Pops Claude up from anywhere on your desktop — even if the app isn't in focus. Useful for a quick question while you're in another app.</td><td>Change it here if Option conflicts with another shortcut you use frequently.</td></tr>
+                    <tr><td><strong>Run on startup</strong></td><td>Keeps Claude running in the background from the moment you log in.</td><td>Recommended ON — scheduled tasks need the app running to fire on time.</td></tr>
+                    <tr><td><strong>Menu bar</strong></td><td>Shows Claude in your Mac menu bar for one-click access.</td><td>ON by default — turn off if you want a cleaner menu bar.</td></tr>
+                    <tr><td><strong>Keep computer awake</strong></td><td>Prevents your Mac from sleeping while Claude is open, so long-running Cowork tasks can complete.</td><td>OFF by default — turn ON if you're running overnight tasks.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card" id="s-connectors">
+            <h2>Customize → Connectors: What's Connected and How to Add More</h2>
+            <p>Settings → Customize → <strong>Connectors</strong>. This is the single place to see every connector, check its status, and connect new ones. Connected ones show a checkmark — anything showing a <strong>Connect</strong> button hasn't been authorized yet.</p>
+            <img src="settings/connectors.png" class="ss" alt="Connectors settings showing connected and available connectors">
+            <p>Currently connected in your setup:</p>
+            <div class="grid3">
+                <div class="breakdown-item"><div class="breakdown-label">Asana</div><div class="breakdown-value" style="font-size:12px;">Web + Custom</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Atlassian Rovo</div><div class="breakdown-value" style="font-size:12px;">Jira + Confluence</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">GitHub</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Gmail</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Google Calendar</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Google Drive</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">Slack</div><div class="breakdown-value" style="font-size:12px;">Web</div></div>
+                <div class="breakdown-item"><div class="breakdown-label">iMessages</div><div class="breakdown-value" style="font-size:12px;">Desktop</div></div>
+            </div>
+            <p style="margin-top:14px;">To connect a new one: click the <strong>Connect</strong> button next to it, complete the browser authorization flow (you'll be asked to log into that service and grant access), then come back — it will show a checkmark. If the authorization fails or you see an error, flag it: the connector may not be enabled at the organization level yet, which is something IT needs to switch on, not something you can fix yourself.</p>
+            <p class="muted">The "Build Together" section of this training walks through connecting each connector live — come back to this page if you need to check status or reconnect one after the workshop.</p>
+        </div>
+
+        <div class="card" id="s-plugins">
+            <h2>Customize → Plugins: What's Installed and What Each Does</h2>
+            <p>Settings → Customize → <strong>Plugins</strong>. Plugins bundle related skills together. You don't need to install anything new today — these are already set up for your account.</p>
+            <img src="settings/plugins.png" class="ss" alt="Plugins settings showing installed plugins">
+            <table>
+                <thead><tr><th>Plugin</th><th>What it gives you</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Productivity</strong> (Anthropic, 4 skills)</td><td>Task management, memory management, and daily digest — useful for tracking what's on your plate and keeping Claude's context fresh.</td></tr>
+                    <tr><td><strong>Enterprise search</strong> (Anthropic, 5 skills)</td><td>Search across Slack, Drive, email, and other connected sources in a single query — instead of checking each one separately.</td></tr>
+                    <tr><td><strong>Slack</strong> (Slack, 11 skills)</td><td>Read channels, search messages, send messages, and interact with Slack directly from Cowork — the EA-relevant skills from the Use Cases tab depend on this.</td></tr>
+                    <tr><td><strong>Servicenow SDK</strong> (ServiceNow, 1 skill)</td><td>IT-specific tooling for ServiceNow. Not relevant for EA/TA work — you can ignore this one.</td></tr>
+                </tbody>
+            </table>
+            <p class="muted">To browse what else is available, click <strong>Browse</strong> in the Plugins panel. New plugins can be added by clicking Browse → selecting one → Add. If you find something useful, mention it to your workshop lead — new plugins may need IT approval before they're enabled across the org.</p>
+        </div>
+
+        <div class="card">
+            <h2>Settings You Don't Need to Touch</h2>
+            <p class="muted">These exist but are either pre-configured correctly or irrelevant for EA/TA use — included here so you know what to skip:</p>
+            <ul>
+                <li><strong>Account</strong> — log out of all devices, check your org role. No changes needed day-to-day.</li>
+                <li><strong>Claude Code settings</strong> — for software developers only. Ignore entirely.</li>
+                <li><strong>Desktop app → Extensions</strong> — advanced local integrations. Only relevant if IT installs something specific for your machine.</li>
+                <li><strong>Desktop app → Developer</strong> — developer tools. Not for EA/TA use.</li>
+                <li><strong>Customize → Skills</strong> — individual skill files; managed via Plugins. You won't need to touch these directly.</li>
+            </ul>
+        </div>
+
+    </section>
+
+    <!-- ============ 9. FAQ ============ -->
     <section id="faq" class="section">
         <div class="card"><h2>❓ Common Questions</h2><p class="muted">Click to copy any answer.</p></div>
         <div class="snippet" onclick="copySnippet(this)">
