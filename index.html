@@ -227,7 +227,7 @@
     <section id="start" class="section active">
         <div class="card">
             <h2>What Is This, Really?</h2>
-            <p>Think of Claude or Gemini like a colleague who's read almost everything and types very fast. You ask a question or give an instruction, and it answers right away — using what it already learned, not by searching the internet live like Google does. It doesn't remember you from a different conversation unless you tell it again.</p>
+            <p>Think of Claude or Gemini like a colleague who's read almost everything and types very fast. You ask a question or give an instruction, and it usually answers straight from what it already learned — it can also search the web live when a task needs current information, but that's the exception, not the default. It doesn't remember you from a different conversation unless you tell it again.</p>
             <p><strong>Claude</strong> is made by a company called Anthropic. <strong>Gemini</strong> is made by Google. It's a bit like Word versus Google Docs — different companies, same basic idea (helping you write and organize things), different features.</p>
             <div class="warn-box">
                 <strong>⚠️ It can sound sure of itself and still be wrong.</strong>
@@ -332,7 +332,7 @@
         </div>
         <div class="card">
             <h2>Does Gemini Have "Skills" Too?</h2>
-            <p>Yes — but in Gemini Enterprise it's called a <strong>Gem</strong>, not a "Skill." Same idea: a saved prompt template you build once (name, instructions, sometimes a starter question) and reuse forever, instead of re-explaining yourself every time. Find it in the left sidebar, below Library — click <strong>Gems</strong> → <strong>+ New Gem</strong>.</p>
+            <p>Yes — but in Gemini Enterprise it's called a <strong>Gem</strong>, not a "Skill." Same idea: a saved prompt template you build once (a name and a set of instructions) and reuse forever, instead of re-explaining yourself every time. Find it in the left sidebar, below Library — click <strong>Gems</strong> → <strong>New Gem</strong>.</p>
             <div class="warn-box">
                 <strong>Someone on our team already built one.</strong>
                 There's a real Gem in our workspace called "Birthday Card Creation - EA/TA" — personalized birthday and anniversary content: cards, text for Slack posts (you still paste it in yourself — Gemini has no Slack connector to post directly), and All Hands slide captions. That's a Gem doing exactly the same job as a Claude skill, just under a different name.
@@ -344,9 +344,8 @@
             <p>The best way to actually learn RCT (from the Use Cases tab) is to build a Gem that teaches it back to you every time you use it. This one's ready to copy — takes about 2 minutes:</p>
             <ol class="step-list">
                 <li>Go to <a href="https://gemini.google.com" target="_blank" rel="noopener">gemini.google.com</a> (sign in with your Delivery Hero account)</li>
-                <li>Left sidebar → <strong>Gems</strong> → <strong>+ New Gem</strong></li>
+                <li>Left sidebar → <strong>Gems</strong> → <strong>New Gem</strong></li>
                 <li>Name: <code>RCT Prompt Coach</code></li>
-                <li>Description: <code>Helps you write sharp, structured prompts using the Role-Context-Task framework</code></li>
                 <li>Paste the instructions below into the <strong>Instructions</strong> field, then click <strong>Save</strong></li>
             </ol>
             <div class="snippet" onclick="copySnippet(this)">
@@ -379,7 +378,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
             <div class="grid2">
                 <div class="breakdown-item" style="text-align:left; padding: 16px;">
                     <div class="breakdown-label">💬 CLAUDE CHAT</div>
-                    <p style="font-size:13px; margin-top:6px;">Like working at a desk. You ask, it answers — a quick draft, a question, thinking something through out loud. It doesn't take independent action.</p>
+                    <p style="font-size:13px; margin-top:6px;">Like working at a desk. You ask, it answers — a quick draft, a question, thinking something through out loud. It only acts through a connector when you approve each step; it doesn't run a multi-step job on its own the way Cowork does.</p>
                 </div>
                 <div class="breakdown-item" style="text-align:left; padding: 16px;">
                     <div class="breakdown-label">🛠️ CLAUDE COWORK</div>
@@ -395,7 +394,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
             <table>
                 <thead><tr><th>Feature</th><th>What it does</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>Claude in Slack</strong></td><td>Adds Claude as an app inside Slack — you message it directly in a channel or DM, like messaging a colleague.</td></tr>
+                    <tr><td><strong>Claude in Slack</strong></td><td>Adds Claude as an app inside Slack — you message it directly in a channel or DM, like messaging a colleague. (Being renamed to "Claude Tag" from early August 2026 — same idea, new name.)</td></tr>
                     <tr><td><strong>The Slack connector</strong></td><td>Turned on in Claude's own settings (not inside Slack itself) — lets Claude look up information from your Slack channels, DMs, and shared files while you're chatting with it somewhere else, e.g. in Claude Chat you can ask "summarize what happened in #project-x this week."</td></tr>
                 </tbody>
             </table>
@@ -417,7 +416,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
     <section id="buildtogether" class="section">
         <div class="card">
             <h2>🔧 Let's Build This Together, Right Now</h2>
-            <p>Not a demo you watch — something you do, at the same time as everyone else in the room. Open your own laptop. We're going to connect every available connector on both tools, one at a time, together. If yours doesn't work, say so out loud — someone next to you probably hit the same snag.</p>
+            <p>Not a demo you watch — something you do, at the same time as everyone else in the room. Open your own laptop. We're going to connect the everyday connectors on both tools, one at a time, together (Gemini also has GitHub and Asana enabled here, but those are out of scope for today's hunt). If yours doesn't work, say so out loud — someone next to you probably hit the same snag.</p>
             <div class="warn-box">
                 <strong>If a connector won't authorize:</strong>
                 It's almost always the org-level toggle, not something you did wrong. Flag the trainer immediately rather than troubleshooting alone — this was supposed to be checked before today (see the Connectors tab).
@@ -428,10 +427,10 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
             <h2>The Connector Scavenger Hunt</h2>
             <p class="muted">Check each one off as you connect it. First table to finish all of theirs, shout it out.</p>
             <ol class="step-list">
-                <li>Open Claude Desktop → Settings → Connectors</li>
+                <li>Open Claude Desktop → Settings → Customize → Connectors</li>
                 <li>Connect Slack — authorize in the browser tab that opens, come back when done</li>
                 <li>Connect Gmail, Google Drive, and Google Calendar the same way</li>
-                <li>Switch to Gemini Enterprise in your browser → Settings → Connected Apps — the single "Google Workspace" toggle should already be on, covering Gmail and Calendar together (Gemini Enterprise doesn't connect to Slack — that's a Claude-only connector)</li>
+                <li>Switch to Gemini Enterprise in your browser → Settings → Connected Apps — the single "Google Workspace" toggle should already be on, covering Gmail and Calendar together (Gemini Enterprise itself does support a Slack connector as a product — ours just isn't connected to it here, so that's a Claude-only connector for us)</li>
             </ol>
             <ul class="hunt-list" id="huntList">
                 <li><input type="checkbox" onchange="updateHuntProgress()"> Claude: Slack connected</li>
@@ -448,7 +447,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
             <p>Once connected on both, ask each tool the exact same thing:</p>
             <div class="prompt-box">Do I have any unread emails that look urgent, and what's on my calendar for the rest of today?</div>
             <p>Compare: which one answered faster? Which one's answer did you trust more? Did either one ask you to approve an action before doing it?</p>
-            <p class="muted">Then, Claude-only: try "Summarize what's happened in #[a channel you're in] over the last day" — this is a Claude-Slack-connector-only capability, Gemini Enterprise can't do this one.</p>
+            <p class="muted">Then, Claude-only: try "Summarize what's happened in #[a channel you're in] over the last day" — Gemini Enterprise here can't do this one, because our Gemini isn't connected to Slack.</p>
         </div>
     </section>
 
@@ -553,7 +552,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
                 <div class="breakdown-item"><div class="breakdown-label">Words you'd actually read</div><div class="breakdown-value">~120</div></div>
                 <div class="breakdown-item"><div class="breakdown-label">Tokens for just those words</div><div class="breakdown-value">~160</div></div>
             </div>
-            <p>But when Claude reads a Slack channel or DM through a connector, it doesn't just see the words in the chat bubbles like you do. For <em>every single message</em>, it also reads who sent it, their email, the exact timestamp, and a unique message ID — bookkeeping that's invisible inside the Slack app itself. Even a one-word reply like "Sure thing" drags that same overhead along with it.</p>
+            <p>But when Claude reads a Slack channel or DM through a connector, it doesn't just see the words in the chat bubbles like you do. For <em>every single message</em>, it also reads who sent it (an internal user ID), the exact timestamp, and a unique message ID — bookkeeping that's invisible inside the Slack app itself. Even a one-word reply like "Sure thing" drags that same overhead along with it.</p>
             <div class="breakdown">
                 <div class="breakdown-item"><div class="breakdown-label">Same 14 messages, with that bookkeeping included</div><div class="breakdown-value">~500–600 tokens</div></div>
             </div>
@@ -669,7 +668,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
             <p class="muted">The weak version forces the AI to guess your tone, audience, and length — you'll get something generic and probably rewrite it anyway. The strong version gets it right closer to the first try, which is exactly why it's worth the extra sentence.</p>
         </div>
         <div class="card">
-            <h2>💼 Four Starting Points</h2>
+            <h2>💼 A Warm-Up, Then Four Starting Points</h2>
             <p>No code for any of these — describe the outcome in plain language, similar to the prompts below. Anything in <code>[brackets]</code> is a placeholder — swap it for your own folder name, channel, or details before sending.</p>
         </div>
 
@@ -711,8 +710,8 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
         </div>
 
         <div class="card">
-            <h2>💬 Coming Later: Slack's Own AI</h2>
-            <p>Slack is building AI features directly into the product — <strong>channel recaps</strong> (a daily catch-up summary of channels you follow but don't post in) and <strong>thread summaries</strong> (turn a long conversation into a short gist with sources). It's a separate paid add-on (roughly $10-15/user/month depending on plan), and <strong>it isn't confirmed as switched on for us yet</strong> — don't promise it's available today.</p>
+            <h2>💬 Slack's Own AI (Not Enabled for Us Yet)</h2>
+            <p>Slack has already built AI features into the product — <strong>channel recaps</strong> (a daily catch-up summary of channels you follow but don't post in) and <strong>thread summaries</strong> (turn a long conversation into a short gist with sources). These are bundled into Slack's higher paid plan tiers now, not sold separately, and <strong>it isn't confirmed as switched on for us yet</strong> — don't promise it's available today.</p>
             <p class="muted">Worth watching for: if it's ever enabled here, it'd be another free-at-point-of-use option like Gemini, not something that touches your Cowork budget.</p>
         </div>
 
@@ -823,7 +822,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
                 <tbody>
                     <tr><td><strong>Search and reference chats</strong></td><td>Claude can look back at past conversations for relevant context — so it remembers a preference you set two weeks ago without you repeating it.</td><td>Keep ON</td></tr>
                     <tr><td><strong>Generate memory from chat history</strong></td><td>Claude gradually builds a persistent memory about you — your preferences, recurring topics, how you work.</td><td>Keep ON</td></tr>
-                    <tr><td><strong>Tool access mode</strong></td><td>Controls how connector tools load in new conversations (default: "Load tools when needed").</td><td>Leave on default</td></tr>
+                    <tr><td><strong>Tool access mode</strong></td><td>Controls how connector tools load in new conversations (default: "Auto").</td><td>Leave on default</td></tr>
                     <tr><td><strong>Connector search</strong></td><td>Claude automatically surfaces the right connectors (Slack, Gmail, etc.) for your conversation without you needing to name them explicitly.</td><td>Keep ON</td></tr>
                     <tr><td><strong>Switch models when a message is flagged</strong></td><td>If a safety check flags a message, Claude automatically switches to a different model to keep the conversation going instead of just pausing it.</td><td>Keep ON</td></tr>
                     <tr><td><strong>Location metadata</strong></td><td>Lets Claude use your rough city/region to improve responses.</td><td>Your choice — OFF by default</td></tr>
@@ -839,7 +838,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
             <img src="settings/cowork-settings.png" class="ss" alt="Cowork settings showing files, trusted folders, and global instructions">
 
             <h3>Cowork files</h3>
-            <p>Where Cowork stores your artifacts and any scheduled tasks you've set up. Default location is fine — only change this if IT specifically asks you to point it somewhere else.</p>
+            <p>Where Cowork stores the files it creates for you and any scheduled tasks you've set up. Default location is fine — only change this if IT specifically asks you to point it somewhere else.</p>
 
             <h3>Trusted Cowork folders</h3>
             <p>Normally, every time you start a Cowork session and attach a folder, it asks you to confirm access. <strong>Trusted folders skip that confirmation</strong> — Claude connects to them immediately without the approval dialog.</p>
@@ -862,8 +861,8 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
         </div>
 
         <div class="card" id="s-desktop">
-            <h2>Desktop App → General: The Shortcut Worth Knowing</h2>
-            <p>Settings → Desktop app → <strong>General</strong>. Most of these are set well by default. Two worth knowing:</p>
+            <h2>Desktop App → General: The Settings Worth Knowing</h2>
+            <p>Settings → Desktop app → <strong>General</strong>. Most of these are set well by default. Four worth knowing:</p>
             <img src="settings/desktop-general.png" class="ss" alt="Desktop General settings showing startup and quick access options">
             <table>
                 <thead><tr><th>Setting</th><th>What it does</th><th>Note</th></tr></thead>
@@ -931,7 +930,7 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
         </div>
         <div class="snippet" onclick="copySnippet(this)">
             <strong>Q: What's the difference between "Claude in Slack" and the "Slack connector"?</strong>
-            <code>A: "Claude in Slack" is Claude as an app you message directly inside Slack. The Slack connector (turned on in Claude's settings) lets Claude search your Slack workspace as background context in any conversation. They're separate — you may want both.</code>
+            <code>A: "Claude in Slack" is Claude as an app you message directly inside Slack. The Slack connector (turned on in Claude's settings) lets Claude search your Slack workspace as background context in any conversation. They're separate features, but the connector needs the in-Slack app installed first, so in practice you'll set up both. (Note: Anthropic is transitioning the in-Slack app to a new experience called "Claude Tag" from early August 2026 — the name may change, but the concept stays the same.)</code>
             <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
         </div>
         <div class="snippet" onclick="copySnippet(this)">
