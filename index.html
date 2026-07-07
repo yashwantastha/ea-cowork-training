@@ -168,9 +168,27 @@
     .agenda-desc .muted { display: block; margin-top: 2px; }
 
     footer { text-align: center; padding: 20px; font-size: 12px; color: #999; }
+
+    #pw-gate { position: fixed; inset: 0; background: #1d1d1f; color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; flex-direction: column; gap: 14px; text-align: center; padding: 20px; }
+    #pw-gate h2 { font-size: 20px; }
+    #pw-gate input { font-size: 16px; padding: 10px 14px; border-radius: 8px; border: 1px solid #555; width: 240px; text-align: center; }
+    #pw-gate button { font-size: 15px; padding: 10px 20px; border-radius: 8px; border: none; background: #cc785c; color: white; cursor: pointer; font-weight: 600; }
+    #pw-gate .pw-error { color: #ff8a8a; font-size: 13px; min-height: 18px; }
+    body.pw-locked > *:not(#pw-gate) { display: none !important; }
+
+    @media print {
+        body.pw-locked, body:not(.pw-locked) { display: none !important; }
+        body::after { content: "This page isn't available for printing."; display: block; text-align: center; padding: 60px; font-size: 18px; }
+    }
 </style>
 </head>
-<body>
+<body class="pw-locked">
+<div id="pw-gate">
+    <h2>🔒 This training portal is password-protected</h2>
+    <input type="password" id="pwInput" placeholder="Enter password" autocomplete="off">
+    <button onclick="checkPassword()">Unlock</button>
+    <div class="pw-error" id="pwError"></div>
+</div>
 <div class="container">
 
     <header>
@@ -279,7 +297,7 @@
                 <li><strong>Claude Chat has "Projects"</strong> — a space where you attach files and instructions once, and every conversation you start inside that Project already has that context.</li>
                 <li><strong>Claude Cowork uses folders the same way</strong> (see above) — one dedicated folder holds everything related to that stakeholder or task.</li>
             </ul>
-            <p>Example: imagine an EA — call her Amanda — supports a senior stakeholder full-time. Instead of re-explaining "here's how they like updates formatted" and "here's what's currently on their plate" every single time, Amanda creates one Project (or one Cowork folder) for that stakeholder: their preferred communication style, the recurring topics and initiatives, meeting cadence and prep format. Every future request — draft an update, prep an agenda, summarize something for them — starts from that context instead of a blank page.</p>
+            <p>Example: imagine you support a senior stakeholder full-time. Instead of re-explaining "here's how they like updates formatted" and "here's what's currently on their plate" every single time, you create one Project (or one Cowork folder) for that stakeholder: their preferred communication style, the recurring topics and initiatives, meeting cadence and prep format. Every future request — draft an update, prep an agenda, summarize something for them — starts from that context instead of a blank page.</p>
             <p class="muted">Worth setting up for anyone you support regularly — it pays for itself after the second or third time you'd otherwise have re-typed the same background.</p>
         </div>
     </section>
@@ -774,6 +792,25 @@
 </div>
 
 <script>
+    const PW_HASH = '11f5727cad32fafad99595c41106dec0c84de3496e6c065c24aea95959b6f67c';
+    async function sha256Hex(text) {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    async function checkPassword() {
+        const input = document.getElementById('pwInput').value;
+        const hash = await sha256Hex(input);
+        if (hash === PW_HASH) {
+            document.body.classList.remove('pw-locked');
+            localStorage.setItem('cowork_pw_unlocked', 'true');
+        } else {
+            document.getElementById('pwError').textContent = 'Incorrect password, try again.';
+            document.getElementById('pwInput').value = '';
+        }
+    }
+    document.getElementById('pwInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+    if (localStorage.getItem('cowork_pw_unlocked') === 'true') document.body.classList.remove('pw-locked');
+
     const coworkRate = { input: 5.00, output: 25.00, label: 'Claude Cowork' };
     const docTokensPerPage = { prose: 600, slides: 250, spreadsheet: 900 };
 
