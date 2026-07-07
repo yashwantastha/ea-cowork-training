@@ -340,6 +340,27 @@
             <p class="muted">If a screen ever looks different from this (Google updates its UI often), say "let's check together" rather than guessing — the concept (a reusable saved prompt) is what matters, not the exact click path.</p>
         </div>
         <div class="card">
+            <h2>🎯 Hands-On: Build Your Own "RCT Prompt Coach" Gem</h2>
+            <p>The best way to actually learn RCT (from the Use Cases tab) is to build a Gem that teaches it back to you every time you use it. This one's ready to copy — takes about 2 minutes:</p>
+            <ol class="step-list">
+                <li>Go to <a href="https://gemini.google.com" target="_blank" rel="noopener">gemini.google.com</a> (sign in with your Delivery Hero account)</li>
+                <li>Left sidebar → <strong>Gems</strong> → <strong>+ New Gem</strong></li>
+                <li>Name: <code>RCT Prompt Coach</code></li>
+                <li>Description: <code>Helps you write sharp, structured prompts using the Role-Context-Task framework</code></li>
+                <li>Paste the instructions below into the <strong>Instructions</strong> field, then click <strong>Save</strong></li>
+            </ol>
+            <div class="snippet" onclick="copySnippet(this)">
+                <strong>Gem instructions — click to copy</strong>
+                <code>You are an expert prompt engineer who helps people write better AI prompts using the RCT framework: Role, Context, Task.
+
+Your job: when a user gives you a rough prompt or a goal, you will (1) diagnose what's missing or vague, (2) ask ONE clarifying question if something critical is unclear, (3) rewrite the prompt using Role/Context/Task, (4) briefly explain what you changed and why.
+
+Rules: always put the rewritten prompt in a clearly labelled code block; keep it concise, no filler; if the input is already well-structured, say so and offer one refinement; never ask more than one question per turn; respond in the same language the user writes in.</code>
+                <button class="toggle-btn copy-btn" onclick="event.stopPropagation(); copySnippet(this.parentElement)">📋 Copy</button>
+            </div>
+            <p class="muted">Once built, it's yours forever — paste any rough prompt into it and it'll sharpen it using exactly the framework from today. Share the Gem with your team afterward if your Workspace allows Gem sharing.</p>
+        </div>
+        <div class="card">
             <h2>When to Reach for Gemini Enterprise First</h2>
             <ul>
                 <li>Quick lookups across a system you've already connected ("what's on my calendar," "find that email from last week")</li>
@@ -740,6 +761,7 @@
         <div class="card">
             <h2>🙋 Your Turn</h2>
             <ol class="step-list">
+                <li>Build your RCT Prompt Coach Gem (see Gemini Enterprise tab) — everyone does this one.</li>
                 <li>Pick one use case above, or bring your own real (low-risk) task.</li>
                 <li>Open the right tool based on what you learned in Compare & Cost.</li>
                 <li>If it needs files, grant it a dedicated folder first (not broad access).</li>
