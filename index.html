@@ -63,10 +63,12 @@
     .badge.gemini { background: #dce8fc; color: #2255aa; }
     .badge.solved { background: #dcf2e3; color: #1e7d43; }
     .badge.explore { background: #ede4f7; color: #6b3fa0; }
+    .badge.design { background: #fde8d8; color: #b25f14; }
     body.dark-mode .badge.claude { background: #4a3226; color: #f0b499; }
     body.dark-mode .badge.gemini { background: #1f3352; color: #9dc1f5; }
     body.dark-mode .badge.solved { background: #16351f; color: #7fd9a0; }
     body.dark-mode .badge.explore { background: #2e2140; color: #cba8ec; }
+    body.dark-mode .badge.design { background: #4a2f10; color: #f5b46e; }
     .usecase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .usecase-table th, .usecase-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #f0f0f2; vertical-align: top; }
     body.dark-mode .usecase-table th, body.dark-mode .usecase-table td { border-bottom-color: #3a3b3d; }
@@ -221,6 +223,7 @@
         <button class="tab-btn" onclick="showTab('compare', this)">⚖️ Compare & Cost</button>
         <button class="tab-btn" onclick="showTab('usecases', this)">💼 Use Cases & Hands-On</button>
         <button class="tab-btn" onclick="showTab('settings', this)">⚙️ Cowork Settings</button>
+        <button class="tab-btn" onclick="showTab('claudedesign', this)">🎨 Claude Design</button>
         <button class="tab-btn" onclick="showTab('faq', this)">❓ FAQ</button>
     </nav>
 
@@ -921,7 +924,57 @@ Rules: always put the rewritten prompt in a clearly labelled code block; keep it
 
     </section>
 
-    <!-- ============ 9. FAQ ============ -->
+    <!-- ============ 9. CLAUDE DESIGN ============ -->
+    <section id="claudedesign" class="section">
+
+        <div class="card">
+            <h2>🎨 What Is Claude Design?</h2>
+            <p>A separate tool from Chat and Cowork, built for creating things from scratch: prototypes, slide decks, and documents. <span class="badge design">Claude Design</span> Fun fact: the polished visual pass on this very portal was built in Claude Design.</p>
+            <img src="settings/claude-design-picker.png" class="ss" alt="Claude Design home screen showing model and effort pickers, project name redacted">
+            <p class="muted">Project name in the screenshot above is redacted, it's someone's own work-in-progress, not something to read into.</p>
+            <p>Two settings decide how a design gets built:</p>
+            <table>
+                <thead><tr><th>Model</th><th>Best for</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Claude Fable 5</strong></td><td>Your toughest, most demanding design challenges</td></tr>
+                    <tr><td><strong>Claude Opus 4.8</strong></td><td>Complex tasks that need real depth</td></tr>
+                    <tr><td><strong>Claude Sonnet 5</strong></td><td>Most efficient for everyday design work</td></tr>
+                    <tr><td><strong>Claude Haiku 4.5</strong></td><td>Fastest, for quick answers and simple drafts</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Effort</strong> (Low / Medium / High / Max) is a separate dial on top of the model choice, it trades speed for how much the model iterates and polishes before showing you a result. Higher effort generally means a longer wait and a more refined output, not a different model.</p>
+            <div class="warn-box">
+                <strong>Claude Design doesn't have connectors.</strong>
+                Unlike Cowork, it can't read your calendar, Slack, or Drive files, it's a from-scratch generation tool. Great for an original birthday card, a slide template, or a prototype, not for tasks that need your own data pulled in.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧪 Live Exercise: Same Prompt, Four Models</h2>
+            <p>The fastest way to feel the difference between models and effort levels is to watch them run side by side. Need <strong>4 volunteers</strong>, each opens Claude Design (pair up with a neighbor if you don't have access yet) and picks a different combination:</p>
+            <table>
+                <thead><tr><th>Volunteer</th><th>Model</th><th>Effort</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Claude Haiku 4.5</td><td>Low</td></tr>
+                    <tr><td>2</td><td>Claude Sonnet 5</td><td>Medium</td></tr>
+                    <tr><td>3</td><td>Claude Opus 4.8</td><td>High</td></tr>
+                    <tr><td>4</td><td>Claude Fable 5</td><td>Max</td></tr>
+                </tbody>
+            </table>
+            <p>Everyone pastes this <strong>exact same prompt</strong> and hits submit at the same time:</p>
+            <div class="prompt-box">Design a birthday card for a work colleague. Keep it warm and celebratory, but still appropriate to share in a team channel. Leave a placeholder for their name and role, and include a short one-line congratulatory message.</div>
+            <p>While it's generating, watch the clock, not just the screen. Once all four finish, compare them live:</p>
+            <ul>
+                <li>Which finished first, and which took noticeably longer?</li>
+                <li>Looking only at the results, could you tell which one spent the most effort?</li>
+                <li>For a task this low-stakes (a birthday card), was the extra wait on High or Max worth it, or would the fast, low-effort version have done the job just as well?</li>
+            </ul>
+            <p class="muted">That last question is the real point of the exercise: matching effort to the stakes of the task, the same idea from the Compare &amp; Cost tab, just made visible in under two minutes.</p>
+        </div>
+
+    </section>
+
+    <!-- ============ 10. FAQ ============ -->
     <section id="faq" class="section">
         <div class="card"><h2>❓ Common Questions</h2></div>
         <div class="snippet">
